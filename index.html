@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -35,27 +36,32 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        header img {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            width: 80px;
-            height: 80px;
+        header .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1em;
+        }
+
+        header .logo-container img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 0.5em;
             cursor: pointer;
             transition: transform 0.3s;
         }
 
-        header img:hover {
+        header .logo-container img:hover {
             transform: scale(1.05);
         }
 
         header h1 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 0.5em;
         }
 
         header p {
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
 
         /* Container */
@@ -133,6 +139,11 @@
             margin: 1.5em 0;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        #landing-page img:hover {
+            transform: scale(1.05);
         }
 
         /* Owner Registration */
@@ -238,11 +249,15 @@
             transform: translateY(-2px);
         }
 
-        /* Media Queries */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            header img {
-                width: 60px;
-                height: 60px;
+            header h1 {
+                font-size: 2em;
+            }
+
+            header .logo-container img {
+                width: 80px;
+                height: 80px;
             }
 
             .whatsapp-btn {
@@ -266,6 +281,14 @@
             .btn {
                 min-width: 150px;
                 font-size: 0.95em;
+            }
+
+            footer p {
+                font-size: 0.9em;
+            }
+
+            .instagram-btn {
+                font-size: 1em;
             }
         }
 
@@ -293,12 +316,14 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
 </div>
 
-<!-- Header with Clickable Logo -->
+<!-- Header with Clickable Logo Centered Above Title -->
 <header>
-    <a href="#" onclick="showSection('landing-page')">
-        <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
-    </a>
-    <h1>Amigo Perro 🐾</h1>
+    <div class="logo-container">
+        <a href="#" onclick="showSection('landing-page')">
+            <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
+        </a>
+        <h1>Amigo Perro 🐾</h1>
+    </div>
     <p>Conectando a amantes de los perros con paseadores confiables 🐕‍🦺</p>
 </header>
 
@@ -510,6 +535,7 @@
 
         if (!email) {
             loginStatus.textContent = "Por favor, ingresa tu correo electrónico.";
+            loginStatus.style.color = "#d9534f";
             return;
         }
 
