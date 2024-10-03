@@ -1,0 +1,560 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amigo Perro 🐾</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            background-color: #1c7d54;
+            color: white;
+            text-align: center;
+            padding: 1.5em 1em;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header img {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        header img:hover {
+            transform: scale(1.05);
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        header p {
+            font-size: 1.1em;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2em auto;
+            padding: 2em;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #b6956a;
+            color: white;
+            padding: 0.8em 1.5em;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+            margin: 0.5em 0;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            background-color: #9f7c53;
+            transform: translateY(-2px);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-btn img {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Sections */
+        section {
+            display: none;
+        }
+
+        /* Landing Page */
+        #landing-page {
+            display: block;
+        }
+
+        #landing-page img {
+            width: 60%;
+            max-width: 400px;
+            margin: 1.5em 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Owner Registration */
+        .owner-registration input,
+        .owner-registration textarea {
+            width: 100%;
+            padding: 0.8em;
+            margin: 0.5em 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .owner-registration input:focus,
+        .owner-registration textarea:focus {
+            border-color: #1c7d54;
+            outline: none;
+        }
+
+        /* About Us */
+        #about-us .about-content {
+            background-color: #b6956a;
+            color: white;
+            padding: 2em;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        #about-us ul {
+            list-style: inside square;
+            margin-top: 1em;
+        }
+
+        #about-us ul li {
+            margin: 0.5em 0;
+        }
+
+        /* Admin Dashboard */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 0.75em;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c7d54;
+            color: white;
+            text-align: center;
+            padding: 1.5em;
+            margin-top: 2em;
+            position: relative;
+            width: 100%;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .instagram-btn {
+            margin-top: 1em;
+            color: white;
+            text-decoration: underline;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        .instagram-btn:hover {
+            color: #b6956a;
+        }
+
+        /* Go Home Button */
+        .go-home {
+            background-color: #1c7d54;
+            color: white;
+            padding: 0.6em 1.2em;
+            font-size: 0.9em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 1em;
+        }
+
+        .go-home:hover {
+            background-color: #155d3b;
+            transform: translateY(-2px);
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            header img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .whatsapp-btn {
+                width: 50px;
+                height: 50px;
+            }
+
+            .whatsapp-btn img {
+                width: 24px;
+                height: 24px;
+            }
+
+            #landing-page img {
+                width: 80%;
+            }
+
+            .container {
+                padding: 1.5em;
+            }
+
+            .btn {
+                min-width: 150px;
+                font-size: 0.95em;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- WhatsApp Contact Button (Floating) -->
+<div class="whatsapp-btn" onclick="window.open('https://wa.me/525527204437', '_blank')">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+</div>
+
+<!-- Header with Clickable Logo -->
+<header>
+    <a href="#" onclick="showSection('landing-page')">
+        <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
+    </a>
+    <h1>Amigo Perro 🐾</h1>
+    <p>Conectando a amantes de los perros con paseadores confiables 🐕‍🦺</p>
+</header>
+
+<div class="container fade-in">
+    <!-- Landing Page Section -->
+    <section id="landing-page">
+        <h2>Bienvenidos 🐾</h2>
+        <p>Regístrate y conecta con los mejores paseadores para tu mascota 🐕‍🦺</p>
+        <img src="https://i.imgur.com/kSYS21o.png" alt="Perro con correa">
+        <div>
+            <button class="btn" onclick="showSection('owner-registration')">Registrar mi Perro 📝</button>
+            <button class="btn" onclick="showSection('admin-dashboard')">Ir al Administrador 🛠</button>
+            <button class="btn" onclick="showSection('walker-app')">Ir al Paseador 🐕‍🦺</button>
+            <button class="btn" onclick="showSection('registered-owners')">Ya estoy registrado 🔐</button>
+            <button class="btn" onclick="showSection('about-us')">Conócenos 📋</button>
+            <button class="btn" onclick="scheduleWalk()">Agendar Paseo 📅</button>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about-us">
+        <div class="about-content">
+            <h2>Acerca de Nosotros 🐕‍🦺</h2>
+            <p>En <strong>Amigo Perro</strong>, nuestro objetivo es brindar paseos seguros, divertidos y confiables para tu mascota. Nos conectamos con paseadores de confianza para asegurar que tu mejor amigo esté en buenas manos.</p>
+            <p>Ofrecemos una experiencia de servicio personalizada para cada perro, con un equipo apasionado por los animales. ¡Confía en nosotros para cuidar y pasear a tu perro con el amor y atención que se merece!</p>
+            <h3>Cuponera 🎟️</h3>
+            <p>Utiliza estos cupones para tus primeros 5 paseos, al agregarnos a nuestras redes sociales (Facebook e Instagram).</p>
+            <ul>
+                <li><strong>Primer Paseo:</strong> $100 (Cien Pesos) 💰</li>
+                <li><strong>Segundo Paseo:</strong> 2 Hrs x 1 ⏰</li>
+                <li><strong>Tercer Paseo:</strong> Incluye clase de adiestramiento de 30 min gratis 🐶🎓</li>
+                <li><strong>Cuarto Paseo:</strong> 50% de descuento 💸</li>
+                <li><strong>Quinto Paseo:</strong> ¡Gratis! 🎉</li>
+            </ul>
+            <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+        </div>
+    </section>
+
+    <!-- Owner Registration Section -->
+    <section id="owner-registration">
+        <h2>Registrar a mi perro 🐾</h2>
+        <div class="owner-registration">
+            <input type="text" id="owner-name" placeholder="Nombre del dueño" required>
+            <input type="email" id="owner-email" placeholder="Correo del dueño" required>
+            <input type="tel" id="owner-phone" placeholder="Teléfono del dueño" required>
+            <input type="text" id="owner-address" placeholder="Dirección del dueño" required>
+            <input type="text" id="dog-name" placeholder="Nombre del perro" required>
+            <input type="text" id="dog-breed" placeholder="Raza del perro" required>
+            <input type="number" id="dog-age" placeholder="Edad del perro" required min="0">
+            <input type="text" id="dog-allergies" placeholder="Alergias del perro">
+            <textarea id="dog-info" placeholder="Otra información importante (medicamentos, etc.)" rows="4"></textarea>
+            <button class="btn" id="register-button" onclick="registerOwner()">Registrar 📝</button>
+        </div>
+        <img src="https://i.imgur.com/zLB4ReI.png" alt="Perro registrado" style="width: 60%; max-width: 400px; margin-top: 1.5em; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+    </section>
+
+    <!-- Registered Owners Section -->
+    <section id="registered-owners">
+        <h2>Usuarios Registrados 🔐</h2>
+        <p>Inicia sesión para ver el estado de tu mascota 🐕‍🦺</p>
+        <input type="email" id="login-email" placeholder="Correo electrónico" required>
+        <button class="btn" onclick="login()">Iniciar Sesión 🔑</button>
+        <p id="login-status" style="margin-top: 1em; color: #d9534f;"></p>
+        <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+    </section>
+
+    <!-- Admin Dashboard Section -->
+    <section id="admin-dashboard">
+        <h2>Panel de Administrador 🛠</h2>
+        <p>Por favor, inicia sesión para acceder al panel de administrador 🔐</p>
+        <input type="password" id="admin-password" placeholder="Ingresa la contraseña">
+        <button class="btn" onclick="authenticateAdmin()">Entrar 🛠</button>
+        <div id="admin-panel" style="display: none; margin-top: 2em;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre del Paseador</th>
+                        <th>Nombre del Perro</th>
+                        <th>Raza</th>
+                        <th>Ubicación</th>
+                    </tr>
+                </thead>
+                <tbody id="walker-data">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+            <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+        </div>
+        <img src="https://i.imgur.com/REJlcOD.png" alt="Administrador" style="width: 60%; max-width: 400px; margin-top: 1.5em; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+    </section>
+
+    <!-- Walker App Section -->
+    <section id="walker-app">
+        <h2>Enviar información del paseo por WhatsApp 🦮</h2>
+        <p>Comparte información del paseo a través de WhatsApp al dueño y a Amigo Perro.</p>
+        <input type="text" id="walker-name" placeholder="Nombre del paseador" required>
+        <input type="text" id="walker-dog-name" placeholder="Nombre del perro" required>
+        <input type="text" id="start-location" placeholder="Punto de inicio del paseo" required>
+        <input type="text" id="walk-time" placeholder="Hora de inicio" required>
+        <input type="tel" id="walker-owner-phone" placeholder="Número de WhatsApp del dueño" required>
+
+        <button class="btn" id="send-to-owner">Enviar al dueño 📤</button>
+        <button class="btn" id="send-to-amigoperro">Enviar a Amigo Perro 📤</button>
+
+        <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+    </section>
+
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>Amigo Perro © 2024. Todos los derechos reservados 🐕‍🦺</p>
+    <a class="instagram-btn" href="https://www.instagram.com/amigo.perro.cdmx?igsh=N2g2aXQzZG1kb3M3" target="_blank">Visítanos en Instagram 📸</a>
+</footer>
+
+<script>
+    // Function to show specific sections
+    function showSection(sectionId) {
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    // Handle sending WhatsApp message to the owner
+    document.getElementById('send-to-owner').addEventListener('click', function() {
+        const walkerName = document.getElementById('walker-name').value.trim();
+        const dogName = document.getElementById('walker-dog-name').value.trim();
+        const startLocation = document.getElementById('start-location').value.trim();
+        const walkTime = document.getElementById('walk-time').value.trim();
+        const ownerPhone = document.getElementById('walker-owner-phone').value.trim();
+
+        if (!walkerName || !dogName || !startLocation || !walkTime || !ownerPhone) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        const message = `Hola, soy ${walkerName}, paseador de ${dogName}. Inicié el paseo desde ${startLocation} a las ${walkTime}.`;
+        const whatsappUrl = `https://wa.me/${ownerPhone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    });
+
+    // Handle sending WhatsApp message to Amigo Perro
+    document.getElementById('send-to-amigoperro').addEventListener('click', function() {
+        const walkerName = document.getElementById('walker-name').value.trim();
+        const dogName = document.getElementById('walker-dog-name').value.trim();
+        const startLocation = document.getElementById('start-location').value.trim();
+        const walkTime = document.getElementById('walk-time').value.trim();
+
+        if (!walkerName || !dogName || !startLocation || !walkTime) {
+            alert("Por favor, completa todos los campos necesarios.");
+            return;
+        }
+
+        const message = `Paseador: ${walkerName}, Perro: ${dogName}, Punto de inicio: ${startLocation}, Hora: ${walkTime}.`;
+        const amigoPerroPhone = '525527204437'; // Replace with the correct WhatsApp number for Amigo Perro
+        const whatsappUrl = `https://wa.me/${amigoPerroPhone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
+    });
+
+    // Admin authentication
+    function authenticateAdmin() {
+        const adminPassword = document.getElementById('admin-password').value;
+        const adminPanel = document.getElementById('admin-panel');
+
+        if (adminPassword === 'admin123') { // Change this to a more secure mechanism
+            adminPanel.style.display = 'block';
+            // Optionally, load admin data here
+            loadAdminData();
+        } else {
+            alert("Contraseña incorrecta. Intenta de nuevo.");
+        }
+    }
+
+    // Dummy function to load admin data
+    function loadAdminData() {
+        const walkerData = document.getElementById('walker-data');
+        // Example data, replace with actual data retrieval
+        const data = [
+            { walker: 'Juan Pérez', dog: 'Rex', breed: 'Labrador', location: 'CDMX' },
+            { walker: 'María López', dog: 'Luna', breed: 'Beagle', location: 'Guadalajara' },
+            { walker: 'Carlos García', dog: 'Max', breed: 'Bulldog', location: 'Monterrey' }
+        ];
+
+        walkerData.innerHTML = '';
+        data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.walker}</td>
+                <td>${item.dog}</td>
+                <td>${item.breed}</td>
+                <td>${item.location}</td>
+            `;
+            walkerData.appendChild(row);
+        });
+    }
+
+    // Handle scheduling walk via Calendly
+    function scheduleWalk() {
+        window.open('https://calendly.com/app/login', '_blank');
+    }
+
+    // Handle registered owners login
+    function login() {
+        const email = document.getElementById('login-email').value.trim();
+        const loginStatus = document.getElementById('login-status');
+
+        if (!email) {
+            loginStatus.textContent = "Por favor, ingresa tu correo electrónico.";
+            return;
+        }
+
+        // Fake login logic (you can replace with real validation)
+        if (email === "owner@example.com") {
+            loginStatus.style.color = "#5cb85c";
+            loginStatus.textContent = "Iniciaste sesión correctamente.";
+            // Optionally, navigate to owner dashboard
+            // showSection('owner-dashboard');
+        } else {
+            loginStatus.style.color = "#d9534f";
+            loginStatus.textContent = "Correo no registrado.";
+        }
+    }
+
+    // Handle owner registration
+    function registerOwner() {
+        const ownerName = document.getElementById('owner-name').value.trim();
+        const ownerEmail = document.getElementById('owner-email').value.trim();
+        const ownerPhone = document.getElementById('owner-phone').value.trim();
+        const ownerAddress = document.getElementById('owner-address').value.trim();
+        const dogName = document.getElementById('dog-name').value.trim();
+        const dogBreed = document.getElementById('dog-breed').value.trim();
+        const dogAge = document.getElementById('dog-age').value.trim();
+        const dogAllergies = document.getElementById('dog-allergies').value.trim();
+        const dogInfo = document.getElementById('dog-info').value.trim();
+
+        if (!ownerName || !ownerEmail || !ownerPhone || !ownerAddress || !dogName || !dogBreed || !dogAge) {
+            alert("Por favor, completa todos los campos obligatorios.");
+            return;
+        }
+
+        // Here you can add the logic to save the registration data
+        alert("Registro exitoso! 📝");
+
+        // Clear the form
+        document.querySelector('.owner-registration').reset();
+
+        // Navigate back to landing page
+        showSection('landing-page');
+    }
+
+    // Attach the registerOwner function to the register button
+    document.getElementById('register-button').addEventListener('click', registerOwner);
+</script>
+
+</body>
+</html>
