@@ -127,11 +127,26 @@
             display: none;
         }
 
-        /* Landing Page */
-        #landing-page {
+        /* Intro Page */
+        #intro-page {
             display: block;
+            text-align: center; /* Asegura que el contenido esté centrado */
         }
 
+        #intro-page img {
+            width: 60%;
+            max-width: 400px;
+            margin: 1.5em 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        #intro-page img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Landing Page */
         #landing-page img {
             width: 60%;
             max-width: 400px;
@@ -271,6 +286,7 @@
                 height: 24px;
             }
 
+            #intro-page img,
             #landing-page img {
                 width: 80%;
             }
@@ -335,7 +351,7 @@
 <!-- Header with Clickable Logo Centered Above Title -->
 <header>
     <div class="logo-container">
-        <a href="#" onclick="showSection('landing-page')">
+        <a href="#" onclick="showSection('intro-page')">
             <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
         </a>
         <h1>Amigo Perro 🐾</h1>
@@ -344,6 +360,14 @@
 </header>
 
 <div class="container fade-in">
+    <!-- Intro Page Section -->
+    <section id="intro-page">
+        <h2>¡Bienvenido a Amigo Perro! 🐾</h2>
+        <p>En <strong>Amigo Perro</strong>, nos dedicamos a conectar a dueños de mascotas con paseadores de confianza, garantizando paseos seguros y divertidos para tu mejor amigo. Únete a nuestra comunidad y dale a tu perro la atención que se merece.</p>
+        <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
+        <button class="btn" onclick="showSection('landing-page')">Ingresar 🚀</button>
+    </section>
+
     <!-- Landing Page Section -->
     <section id="landing-page">
         <h2>Bienvenidos 🐾</h2>
@@ -355,7 +379,7 @@
             <button class="btn" onclick="showSection('registered-owners')">Iniciar Sesión 🔐</button>
             <button class="btn" onclick="showSection('about-us')">Conócenos 📋</button>
             <button class="btn" onclick="scheduleWalk()">Agendar Paseo 📅</button>
-          <button class="btn" onclick="showSection('admin-dashboard')">Administrador 🛠</button>
+            <button class="btn" onclick="showSection('admin-dashboard')">Administrador 🛠</button>
             <button class="btn" onclick="showSection('walker-app')">Paseador 🐕‍🦺</button>
         </div>
     </section>
@@ -365,7 +389,7 @@
         <div class="about-content">
             <h2>Acerca de Nosotros 🐕‍🦺</h2>
             <p>En <strong>Amigo Perro</strong>, nuestro objetivo es brindar paseos seguros, divertidos y confiables para tu mascota. Nos conectamos con paseadores de confianza para asegurar que tu mejor amigo esté en buenas manos.</p>
-            <p>Ofrecemos una experiencia de servicio personalizada para cada perro, con un equipo apasionado por los animales. ¡Confía en nosotros para cuidar y pasear a tu perro con el amor y atención que se merece!</p>
+            <p>Ofrecemos una experiencia de servicio personalizada para cada perro, con un equipo apasionado por los animales. ¡Confía en nosotros para cuidar y pasear a tu perro con el amor y atención que se merece!</p><br>
             <h3>Cuponera 🎟️</h3>
             <p>Utiliza estos cupones para tus primeros 5 paseos, al agregarnos a nuestras redes sociales (Facebook e Instagram).</p>
             <ul>
