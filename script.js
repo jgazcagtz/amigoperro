@@ -31,13 +31,13 @@ const navMenu = document.getElementById('nav-menu');
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    initializeAppUI();
     setupEventListeners();
     checkAuthState();
 });
 
 // Initialize App Function
-function initializeApp() {
+function initializeAppUI() {
     // Hide loading spinner after a short delay
     setTimeout(() => {
         loadingSpinner.style.display = 'none';
