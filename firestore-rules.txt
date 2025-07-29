@@ -1,0 +1,49 @@
+// Firestore Security Rules for Amigo Perro
+// Copy these rules to your Firebase Console > Firestore Database > Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow authenticated users to read and write their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow admins to read all user data
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
+    // Allow users to read and write their own dogs
+    match /dogs/{dogId} {
+      allow read, write: if request.auth != null && 
+        resource.data.ownerId == request.auth.uid;
+      // Allow admins to read all dogs
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
+    // Allow users to read and write walks they're involved in
+    match /walks/{walkId} {
+      allow read, write: if request.auth != null && 
+        (resource.data.ownerId == request.auth.uid || 
+         resource.data.walkerId == request.auth.uid);
+      // Allow admins to read all walks
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
+    // Allow users to read and write ratings they're involved in
+    match /ratings/{ratingId} {
+      allow read, write: if request.auth != null && 
+        (resource.data.raterId == request.auth.uid || 
+         resource.data.ratedUserId == request.auth.uid);
+      // Allow admins to read all ratings
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
+    // Allow authenticated users to create new documents
+    match /{document=**} {
+      allow create: if request.auth != null;
+    }
+  }
+} 
