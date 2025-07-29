@@ -70,7 +70,7 @@ function toggleMobileMenu() {
 }
 
 // Navigation Functions
-function showSection(sectionId) {
+window.showSection = function(sectionId) {
     // Hide all sections
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
@@ -100,7 +100,7 @@ function updateNavigation(activeSection) {
 }
 
 // Tab Switching
-function switchTab(tabType) {
+window.switchTab = function(tabType) {
     // Update tab buttons
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -330,7 +330,7 @@ async function loadDogsList() {
     }
 }
 
-function showAddDogModal() {
+window.showAddDogModal = function() {
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     
@@ -599,16 +599,16 @@ function getErrorMessage(errorCode) {
     return errorMessages[errorCode] || 'Error desconocido';
 }
 
-function openWhatsApp() {
+window.openWhatsApp = function() {
     const message = encodeURIComponent('Hola! Me interesa el servicio de paseos de Amigo Perro 🐾');
     window.open(`https://wa.me/525527204437?text=${message}`, '_blank');
 }
 
-function closeModal() {
+window.closeModal = function() {
     document.getElementById('modal-overlay').classList.remove('active');
 }
 
-function logout() {
+window.logout = function() {
     signOut(auth).then(() => {
         showNotification('Sesión cerrada exitosamente', 'success');
         showSection('home');
@@ -617,7 +617,7 @@ function logout() {
     });
 }
 
-function generateReport() {
+window.generateReport = function() {
     // This would generate a comprehensive report
     showNotification('Reporte generado y descargado', 'success');
 }
