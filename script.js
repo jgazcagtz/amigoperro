@@ -54,6 +54,12 @@ function setupEventListeners() {
     document.getElementById('walker-registration-form').addEventListener('submit', handleWalkerRegistration);
     document.getElementById('login-form').addEventListener('submit', handleLogin);
     
+    // Enhanced form navigation
+    setupFormNavigation();
+    
+    // Password strength checker
+    setupPasswordStrength();
+    
     // Close mobile menu when clicking on links
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
@@ -61,6 +67,113 @@ function setupEventListeners() {
             navToggle.classList.remove('active');
         });
     });
+    
+    // Navbar scroll effect
+    window.addEventListener('scroll', handleNavbarScroll);
+}
+
+// Form Navigation
+function setupFormNavigation() {
+    // Next step buttons
+    document.querySelectorAll('.next-step').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentStep = e.target.closest('.form-step');
+            const nextStep = currentStep.nextElementSibling;
+            const currentStepNum = parseInt(currentStep.dataset.step);
+            const nextStepNum = currentStepNum + 1;
+            
+            if (validateCurrentStep(currentStep)) {
+                currentStep.classList.remove('active');
+                nextStep.classList.add('active');
+                updateProgressSteps(nextStepNum);
+            }
+        });
+    });
+    
+    // Previous step buttons
+    document.querySelectorAll('.prev-step').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentStep = e.target.closest('.form-step');
+            const prevStep = currentStep.previousElementSibling;
+            const currentStepNum = parseInt(currentStep.dataset.step);
+            const prevStepNum = currentStepNum - 1;
+            
+            currentStep.classList.remove('active');
+            prevStep.classList.add('active');
+            updateProgressSteps(prevStepNum);
+        });
+    });
+}
+
+// Validate current form step
+function validateCurrentStep(step) {
+    const inputs = step.querySelectorAll('input[required]');
+    let isValid = true;
+    
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            input.style.borderColor = '#e74c3c';
+            isValid = false;
+        } else {
+            input.style.borderColor = '';
+        }
+    });
+    
+    return isValid;
+}
+
+// Update progress steps
+function updateProgressSteps(activeStep) {
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+        const stepNum = index + 1;
+        if (stepNum <= activeStep) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
+// Password strength checker
+function setupPasswordStrength() {
+    const passwordInput = document.getElementById('owner-password');
+    const strengthIndicator = document.getElementById('password-strength');
+    
+    if (passwordInput && strengthIndicator) {
+        passwordInput.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength = checkPasswordStrength(password);
+            
+            strengthIndicator.className = 'password-strength ' + strength;
+        });
+    }
+}
+
+// Check password strength
+function checkPasswordStrength(password) {
+    let score = 0;
+    
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    
+    if (score < 3) return 'weak';
+    if (score < 5) return 'medium';
+    return 'strong';
+}
+
+// Navbar scroll effect
+function handleNavbarScroll() {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
 }
 
 // Mobile Menu Toggle
@@ -220,7 +333,7 @@ async function handleLogin(e) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             
-            if (loginType === 'admin' && email === 'admin@amigoperro.com') {
+            if (loginType === 'admin' && email === 'gascagtz@gmail.com') {
                 userType = 'admin';
                 showSection('dashboard');
                 showNotification('Bienvenido Administrador', 'success');
@@ -277,6 +390,9 @@ async function loadOwnerDashboard() {
     
     // Load walk history
     await loadWalkHistory();
+    
+    // Load user ratings
+    await loadUserRatings();
 }
 
 async function loadWalkerDashboard() {
@@ -291,6 +407,9 @@ async function loadWalkerDashboard() {
     
     // Load walker history
     await loadWalkerHistory();
+    
+    // Load walker ratings
+    await loadWalkerRatings();
 }
 
 async function loadAdminDashboard() {
@@ -699,6 +818,87 @@ async function loadWalkerHistory() {
     } catch (error) {
         console.error('Error loading walker history:', error);
     }
+}
+
+// Rating Functions
+async function loadUserRatings() {
+    const userRatings = document.getElementById('user-ratings');
+    try {
+        const ratingsQuery = query(
+            collection(db, 'ratings'),
+            where('ratedUserId', '==', currentUser.uid),
+            orderBy('createdAt', 'desc')
+        );
+        const ratingsSnapshot = await getDocs(ratingsQuery);
+        
+        let ratingsHTML = '';
+        ratingsSnapshot.forEach(doc => {
+            const rating = doc.data();
+            ratingsHTML += `
+                <div class="rating-item">
+                    <div class="rating-header">
+                        <span class="rating-user">${rating.raterName}</span>
+                        <span class="rating-date">${new Date(rating.createdAt.toDate()).toLocaleDateString()}</span>
+                    </div>
+                    <div class="rating-stars-small">
+                        ${generateStars(rating.rating)}
+                    </div>
+                    <div class="rating-comment">${rating.comment || 'Sin comentario'}</div>
+                </div>
+            `;
+        });
+        
+        userRatings.innerHTML = ratingsHTML || '<p>No hay calificaciones aún</p>';
+    } catch (error) {
+        console.error('Error loading user ratings:', error);
+    }
+}
+
+async function loadWalkerRatings() {
+    const walkerRatings = document.getElementById('walker-ratings');
+    try {
+        const ratingsQuery = query(
+            collection(db, 'ratings'),
+            where('ratedUserId', '==', currentUser.uid),
+            orderBy('createdAt', 'desc')
+        );
+        const ratingsSnapshot = await getDocs(ratingsQuery);
+        
+        let ratingsHTML = '';
+        ratingsSnapshot.forEach(doc => {
+            const rating = doc.data();
+            ratingsHTML += `
+                <div class="rating-item">
+                    <div class="rating-header">
+                        <span class="rating-user">${rating.raterName}</span>
+                        <span class="rating-date">${new Date(rating.createdAt.toDate()).toLocaleDateString()}</span>
+                    </div>
+                    <div class="rating-stars-small">
+                        ${generateStars(rating.rating)}
+                    </div>
+                    <div class="rating-comment">${rating.comment || 'Sin comentario'}</div>
+                </div>
+            `;
+        });
+        
+        walkerRatings.innerHTML = ratingsHTML || '<p>No hay calificaciones aún</p>';
+    } catch (error) {
+        console.error('Error loading walker ratings:', error);
+    }
+}
+
+function generateStars(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += '<i class="fas fa-star"></i>';
+        } else if (i - 0.5 <= rating) {
+            stars += '<i class="fas fa-star-half-alt"></i>';
+        } else {
+            stars += '<i class="far fa-star"></i>';
+        }
+    }
+    return stars;
 }
 
 // Add CSS for notifications

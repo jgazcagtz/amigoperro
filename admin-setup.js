@@ -20,8 +20,8 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Admin credentials
-const adminEmail = "admin@amigoperro.com";
-const adminPassword = "admin123456"; // Change this to a secure password
+const adminEmail = "gascagtz@gmail.com";
+const adminPassword = "Espuelas8"; // Secure admin password
 
 async function createAdminUser() {
     try {
@@ -35,6 +35,7 @@ async function createAdminUser() {
             phone: '+52 55 2720 4437',
             userType: 'admin',
             isVerified: true,
+            isSuperAdmin: true,
             createdAt: new Date(),
             uid: userCredential.user.uid
         });
