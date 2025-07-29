@@ -1519,6 +1519,152 @@ body {
     padding: 1.5rem;
 }
 
+/* Schedule Walk Modal */
+.schedule-modal {
+    max-width: 600px;
+    width: 90%;
+}
+
+.schedule-modal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.schedule-modal .form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Walk Cards */
+.walk-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.walk-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.walk-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.walk-card .walk-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.walk-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.walk-info-item i {
+    color: var(--primary-color);
+    width: 16px;
+}
+
+.walk-card .walk-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.walk-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.walk-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.walk-status.accepted {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.walk-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.walk-status.completed {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.walk-status.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Contact Info */
+.contact-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border-left: 4px solid var(--accent-color);
+}
+
+.contact-info h5 {
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.contact-info .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.contact-info .contact-item i {
+    color: var(--accent-color);
+    width: 16px;
+}
+
+.whatsapp-contact {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-contact:hover {
+    background: #128c7e;
+    transform: translateY(-1px);
+}
+
 /* Responsive Design */
 /* Tablet and Small Desktop */
 @media (max-width: 1024px) {
@@ -1719,6 +1865,48 @@ body {
     .form-buttons .btn {
         width: 100%;
         justify-content: center;
+    }
+
+    /* Schedule Modal Mobile */
+    .schedule-modal {
+        width: 95%;
+        margin: 1rem;
+    }
+
+    .schedule-modal .form-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .schedule-modal .form-buttons .btn {
+        width: 100%;
+    }
+
+    /* Walk Cards Mobile */
+    .walk-card .walk-info {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .walk-card .walk-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .walk-card .walk-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Contact Info Mobile */
+    .contact-info {
+        padding: 0.8rem;
+    }
+
+    .whatsapp-contact {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
     }
 
     /* Mobile Navigation Improvements */

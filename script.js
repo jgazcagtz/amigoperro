@@ -54,6 +54,12 @@ function setupEventListeners() {
     document.getElementById('walker-registration-form').addEventListener('submit', handleWalkerRegistration);
     document.getElementById('login-form').addEventListener('submit', handleLogin);
     
+    // Schedule walk form
+    const scheduleWalkForm = document.getElementById('schedule-walk-form');
+    if (scheduleWalkForm) {
+        scheduleWalkForm.addEventListener('submit', handleScheduleWalk);
+    }
+    
     // Enhanced form navigation
     setupFormNavigation();
     
@@ -242,6 +248,16 @@ window.switchTab = function(tabType) {
         document.getElementById('walker-form').classList.add('active');
     }
 }
+
+// Schedule Walk Modal Functions
+window.showScheduleWalkModal = function() {
+    document.getElementById('schedule-walk-modal').style.display = 'flex';
+    loadDogsForSchedule();
+};
+
+window.closeScheduleModal = function() {
+    document.getElementById('schedule-walk-modal').style.display = 'none';
+};
 
 // Authentication Functions
 function checkAuthState() {
@@ -443,6 +459,9 @@ async function loadOwnerDashboard() {
     // Load scheduled walks
     await loadScheduledWalks();
     
+    // Load active walks
+    await loadActiveWalksOwner();
+    
     // Load walk history
     await loadWalkHistory();
     
@@ -454,8 +473,11 @@ async function loadWalkerDashboard() {
     const dashboardContent = document.getElementById('walker-dashboard');
     dashboardContent.classList.add('active');
     
-    // Load pending walks
-    await loadPendingWalks();
+    // Load available walks
+    await loadAvailableWalks();
+    
+    // Load accepted walks
+    await loadAcceptedWalks();
     
     // Load active walks
     await loadActiveWalks();
@@ -489,9 +511,28 @@ async function loadDogsList() {
             `;
         });
         
-        dogsList.innerHTML = dogsHTML || '<p>No tienes perros registrados</p>';
+        dogsList.innerHTML = dogsHTML || '<p>No tienes amigos registrados</p>';
     } catch (error) {
         console.error('Error loading dogs:', error);
+    }
+}
+
+// Load dogs for schedule modal
+async function loadDogsForSchedule() {
+    const dogSelect = document.getElementById('walk-dog');
+    try {
+        const dogsQuery = query(collection(db, 'dogs'), where('ownerId', '==', currentUser.uid));
+        const dogsSnapshot = await getDocs(dogsQuery);
+        
+        let optionsHTML = '<option value="">Selecciona tu amigo</option>';
+        dogsSnapshot.forEach(doc => {
+            const dog = doc.data();
+            optionsHTML += `<option value="${doc.id}">${dog.name} (${dog.breed})</option>`;
+        });
+        
+        dogSelect.innerHTML = optionsHTML;
+    } catch (error) {
+        console.error('Error loading dogs for schedule:', error);
     }
 }
 
@@ -499,11 +540,11 @@ window.showAddDogModal = function() {
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     
-    modalTitle.textContent = 'Agregar Perro';
+    modalTitle.textContent = 'Agregar Amigo';
     modalBody.innerHTML = `
         <form id="add-dog-form">
             <div class="form-group">
-                <label>Nombre del Perro</label>
+                <label>Nombre del Amigo</label>
                 <input type="text" id="dog-name" required>
             </div>
             <div class="form-group">
@@ -522,7 +563,7 @@ window.showAddDogModal = function() {
                 <label>Información Adicional</label>
                 <textarea id="dog-info" rows="3"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Agregar Perro</button>
+            <button type="submit" class="btn btn-primary">Agregar Amigo</button>
         </form>
     `;
     
@@ -547,12 +588,43 @@ async function handleAddDog(e) {
     
     try {
         await addDoc(collection(db, 'dogs'), dogData);
-        showNotification('Perro agregado exitosamente', 'success');
+        showNotification('Amigo agregado exitosamente', 'success');
         closeModal();
         loadDogsList();
     } catch (error) {
         console.error('Error adding dog:', error);
-        showNotification('Error al agregar perro', 'error');
+        showNotification('Error al agregar amigo', 'error');
+    }
+}
+
+// Schedule Walk Function
+async function handleScheduleWalk(e) {
+    e.preventDefault();
+    
+    const walkData = {
+        dogId: document.getElementById('walk-dog').value,
+        dogName: document.getElementById('walk-dog').options[document.getElementById('walk-dog').selectedIndex].text,
+        date: document.getElementById('walk-date').value,
+        time: document.getElementById('walk-time').value,
+        duration: parseInt(document.getElementById('walk-duration').value),
+        zone: document.getElementById('walk-zone').value,
+        notes: document.getElementById('walk-notes').value,
+        budget: document.getElementById('walk-budget').value || null,
+        ownerId: currentUser.uid,
+        ownerName: currentUser.displayName || 'Dueño',
+        status: 'pending',
+        createdAt: new Date()
+    };
+    
+    try {
+        await addDoc(collection(db, 'walks'), walkData);
+        showNotification('Paseo programado exitosamente', 'success');
+        closeScheduleModal();
+        loadScheduledWalks();
+        document.getElementById('schedule-walk-form').reset();
+    } catch (error) {
+        console.error('Error scheduling walk:', error);
+        showNotification('Error al programar paseo', 'error');
     }
 }
 
@@ -563,7 +635,7 @@ async function loadScheduledWalks() {
         const walksQuery = query(
             collection(db, 'walks'),
             where('ownerId', '==', currentUser.uid),
-            where('status', '==', 'scheduled')
+            where('status', '==', 'pending')
         );
         const walksSnapshot = await getDocs(walksQuery);
         
@@ -571,16 +643,37 @@ async function loadScheduledWalks() {
         walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
-                <div class="walk-item">
+                <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
-                    <p><strong>Fecha:</strong> ${new Date(walk.date).toLocaleDateString()}</p>
-                    <p><strong>Hora:</strong> ${walk.time}</p>
-                    <p><strong>Paseador:</strong> ${walk.walkerName}</p>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${new Date(walk.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${walk.time}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span>${walk.duration} min</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${walk.zone}</span>
+                        </div>
+                    </div>
+                    <div class="walk-actions">
+                        <span class="walk-status pending">Pendiente</span>
+                        <button class="btn btn-secondary" onclick="cancelWalk('${doc.id}')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
                 </div>
             `;
         });
         
-        scheduledWalks.innerHTML = walksHTML || '<p>No tienes paseos programados</p>';
+        scheduledWalks.innerHTML = walksHTML || '<p>No hay paseos programados</p>';
     } catch (error) {
         console.error('Error loading scheduled walks:', error);
     }
@@ -601,11 +694,25 @@ async function loadWalkHistory() {
         walksSnapshot.forEach(doc => {
             const walk = doc.data();
             historyHTML += `
-                <div class="walk-item">
+                <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
-                    <p><strong>Fecha:</strong> ${new Date(walk.date).toLocaleDateString()}</p>
-                    <p><strong>Duración:</strong> ${walk.duration} minutos</p>
-                    <p><strong>Paseador:</strong> ${walk.walkerName}</p>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${new Date(walk.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${walk.duration} minutos</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Paseador: ${walk.walkerName}</span>
+                        </div>
+                    </div>
+                    <div class="walk-actions">
+                        <span class="walk-status completed">Completado</span>
+                    </div>
                 </div>
             `;
         });
@@ -617,12 +724,11 @@ async function loadWalkHistory() {
 }
 
 // Walker Dashboard Functions
-async function loadPendingWalks() {
-    const pendingWalks = document.getElementById('pending-walks');
+async function loadAvailableWalks() {
+    const availableWalks = document.getElementById('available-walks');
     try {
         const walksQuery = query(
             collection(db, 'walks'),
-            where('walkerId', '==', currentUser.uid),
             where('status', '==', 'pending')
         );
         const walksSnapshot = await getDocs(walksQuery);
@@ -631,19 +737,124 @@ async function loadPendingWalks() {
         walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
-                <div class="walk-item">
+                <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
-                    <p><strong>Fecha:</strong> ${new Date(walk.date).toLocaleDateString()}</p>
-                    <p><strong>Hora:</strong> ${walk.time}</p>
-                    <p><strong>Dueño:</strong> ${walk.ownerName}</p>
-                    <button class="btn btn-primary" onclick="startWalk('${doc.id}')">Iniciar Paseo</button>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${new Date(walk.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${walk.time}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span>${walk.duration} min</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${walk.zone}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>${walk.budget ? `$${walk.budget} MXN` : 'Sin presupuesto'}</span>
+                        </div>
+                    </div>
+                    ${walk.notes ? `<p><strong>Notas:</strong> ${walk.notes}</p>` : ''}
+                    <div class="walk-actions">
+                        <span class="walk-status pending">Disponible</span>
+                        <button class="btn btn-primary" onclick="acceptWalk('${doc.id}')">
+                            <i class="fas fa-check"></i> Aceptar Paseo
+                        </button>
+                    </div>
                 </div>
             `;
         });
         
-        pendingWalks.innerHTML = walksHTML || '<p>No hay paseos pendientes</p>';
+        availableWalks.innerHTML = walksHTML || '<p>No hay paseos disponibles</p>';
     } catch (error) {
-        console.error('Error loading pending walks:', error);
+        console.error('Error loading available walks:', error);
+    }
+}
+
+async function loadAcceptedWalks() {
+    const acceptedWalks = document.getElementById('accepted-walks');
+    try {
+        const walksQuery = query(
+            collection(db, 'walks'),
+            where('walkerId', '==', currentUser.uid),
+            where('status', '==', 'accepted')
+        );
+        const walksSnapshot = await getDocs(walksQuery);
+        
+        let walksHTML = '';
+        walksSnapshot.forEach(doc => {
+            const walk = doc.data();
+            walksHTML += `
+                <div class="walk-card">
+                    <h4>Paseo con ${walk.dogName}</h4>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${new Date(walk.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${walk.time}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-user"></i>
+                            <span>${walk.ownerName}</span>
+                        </div>
+                    </div>
+                    <div class="contact-info">
+                        <h5>Información de Contacto</h5>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>${walk.ownerPhone || 'No disponible'}</span>
+                        </div>
+                        <a href="https://wa.me/52${walk.ownerPhone?.replace(/\D/g, '')}?text=Hola, soy tu paseador para el paseo de ${walk.dogName}" 
+                           class="whatsapp-contact" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                        </a>
+                    </div>
+                    <div class="walk-actions">
+                        <span class="walk-status accepted">Aceptado</span>
+                        <button class="btn btn-primary" onclick="startWalk('${doc.id}')">
+                            <i class="fas fa-play"></i> Iniciar Paseo
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        acceptedWalks.innerHTML = walksHTML || '<p>No hay paseos aceptados</p>';
+    } catch (error) {
+        console.error('Error loading accepted walks:', error);
+    }
+}
+
+async function acceptWalk(walkId) {
+    try {
+        // Get walker info
+        const walkerDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        const walkerData = walkerDoc.data();
+        
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'accepted',
+            walkerId: currentUser.uid,
+            walkerName: walkerData.name,
+            walkerPhone: walkerData.phone,
+            acceptedAt: new Date()
+        });
+        
+        showNotification('Paseo aceptado exitosamente', 'success');
+        loadAvailableWalks();
+        loadAcceptedWalks();
+    } catch (error) {
+        console.error('Error accepting walk:', error);
+        showNotification('Error al aceptar paseo', 'error');
     }
 }
 
@@ -655,7 +866,7 @@ async function startWalk(walkId) {
         });
         
         showNotification('Paseo iniciado', 'success');
-        loadPendingWalks();
+        loadAcceptedWalks();
         loadActiveWalks();
     } catch (error) {
         console.error('Error starting walk:', error);
@@ -750,12 +961,31 @@ async function loadActiveWalks() {
         walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
-                <div class="walk-item">
-                    <h4>Paseo en Curso</h4>
-                    <p><strong>Perro:</strong> ${walk.dogName}</p>
-                    <p><strong>Dueño:</strong> ${walk.ownerName}</p>
-                    <p><strong>Iniciado:</strong> ${new Date(walk.startTime.toDate()).toLocaleTimeString()}</p>
-                    <button class="btn btn-primary" onclick="endWalk('${doc.id}')">Finalizar Paseo</button>
+                <div class="walk-card">
+                    <h4>Paseo en Curso con ${walk.dogName}</h4>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-user"></i>
+                            <span>${walk.ownerName}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-play"></i>
+                            <span>Iniciado: ${new Date(walk.startTime.toDate()).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    <div class="contact-info">
+                        <h5>Contacto del Dueño</h5>
+                        <a href="https://wa.me/52${walk.ownerPhone?.replace(/\D/g, '')}?text=Hola, estoy paseando a ${walk.dogName}" 
+                           class="whatsapp-contact" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                        </a>
+                    </div>
+                    <div class="walk-actions">
+                        <span class="walk-status active">En Curso</span>
+                        <button class="btn btn-primary" onclick="endWalk('${doc.id}')">
+                            <i class="fas fa-stop"></i> Finalizar Paseo
+                        </button>
+                    </div>
                 </div>
             `;
         });
@@ -763,6 +993,52 @@ async function loadActiveWalks() {
         activeWalks.innerHTML = walksHTML || '<p>No hay paseos activos</p>';
     } catch (error) {
         console.error('Error loading active walks:', error);
+    }
+}
+
+async function loadActiveWalksOwner() {
+    const activeWalksOwner = document.getElementById('active-walks-owner');
+    try {
+        const walksQuery = query(
+            collection(db, 'walks'),
+            where('ownerId', '==', currentUser.uid),
+            where('status', '==', 'active')
+        );
+        const walksSnapshot = await getDocs(walksQuery);
+        
+        let walksHTML = '';
+        walksSnapshot.forEach(doc => {
+            const walk = doc.data();
+            walksHTML += `
+                <div class="walk-card">
+                    <h4>Paseo en Curso con ${walk.dogName}</h4>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Paseador: ${walk.walkerName}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-play"></i>
+                            <span>Iniciado: ${new Date(walk.startTime.toDate()).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    <div class="contact-info">
+                        <h5>Contacto del Paseador</h5>
+                        <a href="https://wa.me/52${walk.walkerPhone?.replace(/\D/g, '')}?text=Hola, soy el dueño de ${walk.dogName}" 
+                           class="whatsapp-contact" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+                        </a>
+                    </div>
+                    <div class="walk-actions">
+                        <span class="walk-status active">En Curso</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        activeWalksOwner.innerHTML = walksHTML || '<p>No hay paseos activos</p>';
+    } catch (error) {
+        console.error('Error loading active walks for owner:', error);
     }
 }
 
@@ -784,6 +1060,21 @@ async function endWalk(walkId) {
     }
 }
 
+async function cancelWalk(walkId) {
+    try {
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'cancelled',
+            cancelledAt: new Date()
+        });
+        
+        showNotification('Paseo cancelado', 'success');
+        loadScheduledWalks();
+    } catch (error) {
+        console.error('Error cancelling walk:', error);
+        showNotification('Error al cancelar paseo', 'error');
+    }
+}
+
 async function loadWalkerHistory() {
     const walkerHistory = document.getElementById('walker-history');
     try {
@@ -799,11 +1090,25 @@ async function loadWalkerHistory() {
         walksSnapshot.forEach(doc => {
             const walk = doc.data();
             historyHTML += `
-                <div class="walk-item">
+                <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
-                    <p><strong>Fecha:</strong> ${new Date(walk.date).toLocaleDateString()}</p>
-                    <p><strong>Duración:</strong> ${walk.duration || 'N/A'} minutos</p>
-                    <p><strong>Dueño:</strong> ${walk.ownerName}</p>
+                    <div class="walk-info">
+                        <div class="walk-info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${new Date(walk.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${walk.duration || 'N/A'} minutos</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Dueño: ${walk.ownerName}</span>
+                        </div>
+                    </div>
+                    <div class="walk-actions">
+                        <span class="walk-status completed">Completado</span>
+                    </div>
                 </div>
             `;
         });
