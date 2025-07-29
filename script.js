@@ -138,15 +138,26 @@ function updateProgressSteps(activeStep) {
 
 // Password strength checker
 function setupPasswordStrength() {
-    const passwordInput = document.getElementById('owner-password');
-    const strengthIndicator = document.getElementById('password-strength');
+    const ownerPasswordInput = document.getElementById('owner-password');
+    const ownerStrengthIndicator = document.getElementById('password-strength');
+    const walkerPasswordInput = document.getElementById('walker-password');
+    const walkerStrengthIndicator = document.getElementById('walker-password-strength');
     
-    if (passwordInput && strengthIndicator) {
-        passwordInput.addEventListener('input', (e) => {
+    if (ownerPasswordInput && ownerStrengthIndicator) {
+        ownerPasswordInput.addEventListener('input', (e) => {
             const password = e.target.value;
             const strength = checkPasswordStrength(password);
             
-            strengthIndicator.className = 'password-strength ' + strength;
+            ownerStrengthIndicator.className = 'password-strength ' + strength;
+        });
+    }
+    
+    if (walkerPasswordInput && walkerStrengthIndicator) {
+        walkerPasswordInput.addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength = checkPasswordStrength(password);
+            
+            walkerStrengthIndicator.className = 'password-strength ' + strength;
         });
     }
 }
@@ -249,14 +260,34 @@ function checkAuthState() {
 async function handleOwnerRegistration(e) {
     e.preventDefault();
     
-    const formData = new FormData(e.target);
+    // Validate terms acceptance
+    const termsAccepted = document.getElementById('owner-terms').checked;
+    const privacyAccepted = document.getElementById('owner-privacy').checked;
+    
+    if (!termsAccepted || !privacyAccepted) {
+        showNotification('Debes aceptar los términos y condiciones y la política de privacidad', 'error');
+        return;
+    }
+    
+    // Validate password confirmation
+    const password = document.getElementById('owner-password').value;
+    const passwordConfirm = document.getElementById('owner-password-confirm').value;
+    
+    if (password !== passwordConfirm) {
+        showNotification('Las contraseñas no coinciden', 'error');
+        return;
+    }
+    
     const userData = {
-        name: formData.get('owner-name') || document.getElementById('owner-name').value,
-        email: formData.get('owner-email') || document.getElementById('owner-email').value,
-        phone: formData.get('owner-phone') || document.getElementById('owner-phone').value,
-        address: formData.get('owner-address') || document.getElementById('owner-address').value,
-        password: formData.get('owner-password') || document.getElementById('owner-password').value,
+        name: document.getElementById('owner-name').value,
+        email: document.getElementById('owner-email').value,
+        phone: document.getElementById('owner-phone').value,
+        address: document.getElementById('owner-address').value,
+        birthdate: document.getElementById('owner-birthdate').value,
+        password: password,
         userType: 'owner',
+        termsAccepted: true,
+        privacyAccepted: true,
         createdAt: new Date()
     };
     
@@ -282,16 +313,44 @@ async function handleOwnerRegistration(e) {
 async function handleWalkerRegistration(e) {
     e.preventDefault();
     
-    const formData = new FormData(e.target);
+    // Validate terms acceptance
+    const termsAccepted = document.getElementById('walker-terms').checked;
+    const privacyAccepted = document.getElementById('walker-privacy').checked;
+    const insuranceConfirmed = document.getElementById('walker-insurance').checked;
+    
+    if (!termsAccepted || !privacyAccepted) {
+        showNotification('Debes aceptar los términos y condiciones y la política de privacidad', 'error');
+        return;
+    }
+    
+    if (!insuranceConfirmed) {
+        showNotification('Debes confirmar que tienes seguro de responsabilidad civil', 'error');
+        return;
+    }
+    
+    // Validate password confirmation
+    const password = document.getElementById('walker-password').value;
+    const passwordConfirm = document.getElementById('walker-password-confirm').value;
+    
+    if (password !== passwordConfirm) {
+        showNotification('Las contraseñas no coinciden', 'error');
+        return;
+    }
+    
     const userData = {
-        name: formData.get('walker-name') || document.getElementById('walker-name').value,
-        email: formData.get('walker-email') || document.getElementById('walker-email').value,
-        phone: formData.get('walker-phone') || document.getElementById('walker-phone').value,
-        experience: formData.get('walker-experience') || document.getElementById('walker-experience').value,
-        zones: formData.get('walker-zones') || document.getElementById('walker-zones').value,
-        password: formData.get('walker-password') || document.getElementById('walker-password').value,
+        name: document.getElementById('walker-name').value,
+        email: document.getElementById('walker-email').value,
+        phone: document.getElementById('walker-phone').value,
+        birthdate: document.getElementById('walker-birthdate').value,
+        experience: document.getElementById('walker-experience').value,
+        zones: document.getElementById('walker-zones').value,
+        description: document.getElementById('walker-description').value,
+        password: password,
         userType: 'walker',
         isVerified: false,
+        termsAccepted: true,
+        privacyAccepted: true,
+        insuranceConfirmed: true,
         createdAt: new Date()
     };
     

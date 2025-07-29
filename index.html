@@ -316,7 +316,14 @@
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="owner-terms" required>
                                     <span class="checkmark"></span>
-                                    Acepto los <a href="#" class="terms-link">términos y condiciones</a>
+                                    Acepto los <a href="terms.html" target="_blank" class="terms-link">términos y condiciones</a>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="owner-privacy" required>
+                                    <span class="checkmark"></span>
+                                    Acepto la <a href="terms.html#privacy" target="_blank" class="terms-link">política de privacidad</a>
                                 </label>
                             </div>
                             <div class="form-buttons">
@@ -335,33 +342,125 @@
 
                 <!-- Walker Registration Form -->
                 <div id="walker-form" class="register-form">
-                    <h3>Registro de Paseador</h3>
-                    <form id="walker-registration-form">
-                        <div class="form-group">
-                            <label>Nombre Completo</label>
-                            <input type="text" id="walker-name" required>
+                    <div class="form-header">
+                        <h3>🚶‍♂️ Registro de Paseador</h3>
+                        <p>Únete a nuestro equipo de paseadores profesionales</p>
+                    </div>
+                    <form id="walker-registration-form" class="enhanced-form">
+                        <div class="form-progress">
+                            <div class="progress-step active" data-step="1">
+                                <span class="step-number">1</span>
+                                <span class="step-label">Información Personal</span>
+                            </div>
+                            <div class="progress-step" data-step="2">
+                                <span class="step-number">2</span>
+                                <span class="step-label">Experiencia y Zonas</span>
+                            </div>
+                            <div class="progress-step" data-step="3">
+                                <span class="step-number">3</span>
+                                <span class="step-label">Seguridad y Términos</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="walker-email" required>
+                        
+                        <div class="form-step active" data-step="1">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> Nombre Completo</label>
+                                <input type="text" id="walker-name" placeholder="Tu nombre completo" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> Fecha de Nacimiento</label>
+                                <input type="date" id="walker-birthdate" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" id="walker-email" placeholder="tu@email.com" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <button type="button" class="btn btn-primary next-step">
+                                <span>Siguiente</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
                         </div>
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="tel" id="walker-phone" required>
+                        
+                        <div class="form-step" data-step="2">
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> Teléfono</label>
+                                <input type="tel" id="walker-phone" placeholder="+52 55 1234 5678" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-clock"></i> Experiencia (años)</label>
+                                <input type="number" id="walker-experience" min="0" placeholder="0" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-map-marker-alt"></i> Zonas de Trabajo</label>
+                                <input type="text" id="walker-zones" placeholder="Ej: CDMX, Polanco, Condesa" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-info-circle"></i> Breve Descripción</label>
+                                <textarea id="walker-description" rows="3" placeholder="Cuéntanos sobre tu experiencia con perros..."></textarea>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-buttons">
+                                <button type="button" class="btn btn-secondary prev-step">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Anterior</span>
+                                </button>
+                                <button type="button" class="btn btn-primary next-step">
+                                    <span>Siguiente</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Experiencia (años)</label>
-                            <input type="number" id="walker-experience" min="0" required>
+                        
+                        <div class="form-step" data-step="3">
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> Contraseña</label>
+                                <input type="password" id="walker-password" placeholder="Mínimo 8 caracteres" required>
+                                <div class="password-strength" id="walker-password-strength"></div>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                                <input type="password" id="walker-password-confirm" placeholder="Repite tu contraseña" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="walker-terms" required>
+                                    <span class="checkmark"></span>
+                                    Acepto los <a href="terms.html" target="_blank" class="terms-link">términos y condiciones</a>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="walker-privacy" required>
+                                    <span class="checkmark"></span>
+                                    Acepto la <a href="terms.html#privacy" target="_blank" class="terms-link">política de privacidad</a>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="walker-insurance" required>
+                                    <span class="checkmark"></span>
+                                    Confirmo que tengo seguro de responsabilidad civil (recomendado)
+                                </label>
+                            </div>
+                            <div class="form-buttons">
+                                <button type="button" class="btn btn-secondary prev-step">
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span>Anterior</span>
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>Completar Registro</span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Zonas de Trabajo</label>
-                            <input type="text" id="walker-zones" placeholder="Ej: CDMX, Polanco, Condesa" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Contraseña</label>
-                            <input type="password" id="walker-password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Registrar Paseador</button>
                     </form>
                 </div>
             </div>
