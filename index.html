@@ -1,155 +1,396 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amigo Perro 🐾</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Amigo Perro 🐾 - Conectando Paseadores y Dueños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <meta name="google-site-verification" content="TfYp_LyD_qligVlnAlM5EGg0imEkcpTQFTnk2yafreo" />
 </head>
 <body>
-
-    <!-- WhatsApp Contact Button (Floating) -->
-    <div class="whatsapp-btn" onclick="window.open('https://wa.me/525527204437', '_blank')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
     </div>
 
-    <!-- Header with Clickable Logo Centered Above Title -->
-    <header>
-        <div class="logo-container">
-            <a href="#" onclick="showSection('intro-page')">
+    <!-- WhatsApp Contact Button -->
+    <div class="whatsapp-btn" onclick="openWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
                 <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
-            </a>
-            <h1>Amigo Perro 🐾</h1>
+                <span>Amigo Perro</span>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#" class="nav-link" onclick="showSection('home')">Inicio</a>
+                <a href="#" class="nav-link" onclick="showSection('services')">Servicios</a>
+                <a href="#" class="nav-link" onclick="showSection('about')">Nosotros</a>
+                <a href="#" class="nav-link" onclick="showSection('contact')">Contacto</a>
+                <button class="nav-btn" onclick="showSection('login')">Iniciar Sesión</button>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </div>
-        <p>Conectando a amantes de los perros con paseadores confiables 🐕‍🦺</p>
-    </header>
+    </nav>
 
-    <div class="container fade-in">
-        <!-- Intro Page Section -->
-        <section id="intro-page">
-            <h2>🐾</h2>
-            <p>En <strong>Amigo Perro</strong>, nos dedicamos a conectar a dueños de mascotas con paseadores de confianza, garantizando paseos seguros y divertidos para tu mejor amigo. Únete a nuestra comunidad y dale a tu perro la atención que se merece.</p>
-            <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro Logo">
-            <button class="btn" onclick="showSection('landing-page')">Ingresar 🚀</button>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Conectando Paseadores y Dueños de Perros 🐾</h1>
+                    <p>Encuentra el paseador perfecto para tu mejor amigo o únete como paseador profesional</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showSection('register')">
+                            <i class="fas fa-user-plus"></i> Registrarse
+                        </button>
+                        <button class="btn btn-secondary" onclick="showSection('login')">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://i.imgur.com/kSYS21o.png" alt="Perro feliz">
+                </div>
+            </div>
         </section>
 
-        <!-- Landing Page Section -->
-        <section id="landing-page">
-            <h2>Bienvenidos 🐾</h2>
-            <p>Regístrate y conecta con los mejores paseadores para tu mascota 🐕‍🦺</p>
-            <img src="https://i.imgur.com/kSYS21o.png" alt="Perro con correa">
-            <div>
-                <button class="btn" onclick="showSection('owner-registration')">Registrar a mi Amigo Perro 📝</button>
+        <!-- Services Section -->
+        <section id="services" class="section">
+            <div class="container">
+                <h2>Nuestros Servicios</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <i class="fas fa-dog"></i>
+                        <h3>Paseos Personalizados</h3>
+                        <p>Paseos adaptados a las necesidades de tu perro</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Horarios Flexibles</h3>
+                        <p>Paseos disponibles 24/7 según tu horario</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Paseadores Verificados</h3>
+                        <p>Todos nuestros paseadores están verificados</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Cobertura Local</h3>
+                        <p>Servicio disponible en toda la CDMX</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <h2>Sobre Nosotros</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Amigo Perro es la plataforma líder en México para conectar dueños de perros con paseadores profesionales y confiables.</p>
+                        <div class="features">
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Paseadores verificados y asegurados</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Paseos personalizados según las necesidades</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Seguimiento en tiempo real</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Pagos seguros y transparentes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://i.imgur.com/6cnRyuX.png" alt="Amigo Perro">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Register Section -->
+        <section id="register" class="section">
+            <div class="container">
+                <h2>Registro</h2>
+                <div class="register-tabs">
+                    <button class="tab-btn active" onclick="switchTab('owner')">Dueño de Perro</button>
+                    <button class="tab-btn" onclick="switchTab('walker')">Paseador</button>
+                </div>
+
+                <!-- Owner Registration Form -->
+                <div id="owner-form" class="register-form active">
+                    <h3>Registro de Dueño de Perro</h3>
+                    <form id="owner-registration-form">
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="owner-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="owner-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="tel" id="owner-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <input type="text" id="owner-address" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="owner-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar Dueño</button>
+                    </form>
+                </div>
+
+                <!-- Walker Registration Form -->
+                <div id="walker-form" class="register-form">
+                    <h3>Registro de Paseador</h3>
+                    <form id="walker-registration-form">
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" id="walker-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="walker-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="tel" id="walker-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Experiencia (años)</label>
+                            <input type="number" id="walker-experience" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Zonas de Trabajo</label>
+                            <input type="text" id="walker-zones" placeholder="Ej: CDMX, Polanco, Condesa" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="walker-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar Paseador</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Login Section -->
+        <section id="login" class="section">
+            <div class="container">
+                <h2>Iniciar Sesión</h2>
+                <div class="login-form">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="login-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="login-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Usuario</label>
+                            <select id="login-type" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="owner">Dueño de Perro</option>
+                                <option value="walker">Paseador</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Panel de Control</h2>
+                    <button class="btn btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
                 
-                <button class="btn" onclick="showSection('registered-owners')">Iniciar Sesión 🔐</button>
-                <button class="btn" onclick="showSection('about-us')">Conócenos 📋</button>
-                <button class="btn" onclick="scheduleWalk()">Agendar Paseo 📅</button>
-                <button class="btn" onclick="showSection('admin-dashboard')">Administrador 🛠</button>
-                <button class="btn" onclick="showSection('walker-app')">Paseador 🐕‍🦺</button>
+                <!-- Owner Dashboard -->
+                <div id="owner-dashboard" class="dashboard-content">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Mis Perros</h3>
+                            <div id="dogs-list"></div>
+                            <button class="btn btn-primary" onclick="showAddDogModal()">
+                                <i class="fas fa-plus"></i> Agregar Perro
+                            </button>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Paseos Programados</h3>
+                            <div id="scheduled-walks"></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Historial de Paseos</h3>
+                            <div id="walk-history"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Walker Dashboard -->
+                <div id="walker-dashboard" class="dashboard-content">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Paseos Pendientes</h3>
+                            <div id="pending-walks"></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Paseos en Curso</h3>
+                            <div id="active-walks"></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Historial de Paseos</h3>
+                            <div id="walker-history"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div id="admin-dashboard" class="dashboard-content">
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Usuarios Registrados</h3>
+                            <div class="admin-stats">
+                                <div class="stat">
+                                    <span class="stat-number" id="total-owners">0</span>
+                                    <span class="stat-label">Dueños</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" id="total-walkers">0</span>
+                                    <span class="stat-label">Paseadores</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" id="total-dogs">0</span>
+                                    <span class="stat-label">Perros</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Paseos Activos</h3>
+                            <div id="admin-active-walks"></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Reportes</h3>
+                            <button class="btn btn-primary" onclick="generateReport()">
+                                <i class="fas fa-download"></i> Generar Reporte
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- About Us Section -->
-        <section id="about-us">
-            <div class="about-content">
-                <h2>Acerca de Nosotros 🐕‍🦺</h2>
-                <p>En <strong>Amigo Perro</strong>, nuestro objetivo es brindar paseos seguros, divertidos y confiables para tu mascota. Nos conectamos con paseadores de confianza para asegurar que tu mejor amigo esté en buenas manos.</p>
-                <p>Ofrecemos una experiencia de servicio personalizada para cada perro, con un equipo apasionado por los animales. ¡Confía en nosotros para cuidar y pasear a tu perro con el amor y atención que se merece!</p><br>
-                <h3>Cuponera 🎟️</h3>
-                <p>Utiliza estos cupones para tus primeros 5 paseos, al agregarnos a nuestras redes sociales (Facebook e Instagram).</p>
-                <ul>
-                    <li><strong>Primer Paseo:</strong> $100 (Cien Pesos) 💰</li>
-                    <li><strong>Segundo Paseo:</strong> 2 Hrs x 1 ⏰</li>
-                    <li><strong>Tercer Paseo:</strong> Incluye clase de adiestramiento de 30 min gratis 🐶🎓</li>
-                    <li><strong>Cuarto Paseo:</strong> 50% de descuento 💸</li>
-                    <li><strong>Quinto Paseo:</strong> ¡Gratis! 🎉</li>
-                </ul>
-                <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container">
+                <h2>Contacto</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <div>
+                                <h4>WhatsApp</h4>
+                                <p>+52 55 2720 4437</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-instagram"></i>
+                            <div>
+                                <h4>Instagram</h4>
+                                <p>@amigo.perro.cdmx</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>info@amigoperro.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+    </main>
 
-        <!-- Owner Registration Section -->
-        <section id="owner-registration">
-            <h2>Registrar a mi Amigo Perro 🐾</h2>
-            <div class="owner-registration">
-                <input type="text" id="owner-name" placeholder="Nombre del dueño" required>
-                <input type="email" id="owner-email" placeholder="Correo del dueño" required>
-                <input type="tel" id="owner-phone" placeholder="Teléfono del dueño" required>
-                <input type="text" id="owner-address" placeholder="Dirección del dueño" required>
-                <input type="text" id="dog-name" placeholder="Nombre del perro" required>
-                <input type="text" id="dog-breed" placeholder="Raza del perro" required>
-                <input type="number" id="dog-age" placeholder="Edad del perro" required min="0">
-                <input type="text" id="dog-allergies" placeholder="Alergias del perro">
-                <textarea id="dog-info" placeholder="Otra información importante (medicamentos, etc.)" rows="4"></textarea>
-                <button class="btn" id="register-button">Registrar 📝</button>
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Título del Modal</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <img src="https://i.imgur.com/zLB4ReI.png" alt="Perro registrado" style="width: 60%; max-width: 400px; margin-top: 1.5em; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
-        </section>
-
-        <!-- Registered Owners Section -->
-        <section id="registered-owners">
-            <h2>Usuarios Registrados 🔐</h2>
-            <p>Inicia sesión 🐕‍🦺</p>
-            <input type="email" id="login-email" placeholder="Correo electrónico" required>
-            <button class="btn" onclick="login()">Iniciar Sesión 🔑</button>
-            <p id="login-status" style="margin-top: 1em; color: #d9534f;"></p>
-            <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
-        </section>
-
-        <!-- Admin Dashboard Section -->
-        <section id="admin-dashboard">
-            <h2>Panel de Administrador 🛠</h2>
-            <p>Por favor, inicia sesión para acceder al panel de administrador 🔐</p>
-            <input type="password" id="admin-password" placeholder="Ingresa la contraseña">
-            <button class="btn" onclick="authenticateAdmin()">Entrar 🛠</button>
-            <div id="admin-panel" style="display: none; margin-top: 2em;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre del Paseador</th>
-                            <th>Nombre del Perro</th>
-                            <th>Raza</th>
-                            <th>Ubicación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="walker-data">
-                        <!-- Data will be inserted here -->
-                    </tbody>
-                </table>
-                <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be inserted here -->
             </div>
-            <img src="https://i.imgur.com/REJlcOD.png" alt="Administrador" style="width: 60%; max-width: 400px; margin-top: 1.5em; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-        </section>
-
-        <!-- Walker App Section -->
-        <section id="walker-app">
-            <h2>Enviar información del paseo por WhatsApp 🦮</h2>
-            <p>Comparte información del paseo a través de WhatsApp al dueño y a Amigo Perro.</p>
-            <input type="text" id="walker-name" placeholder="Nombre del paseador" required>
-            <input type="text" id="walker-dog-name" placeholder="Nombre del perro" required>
-            <input type="text" id="start-location" placeholder="Punto de inicio del paseo" required>
-            <input type="text" id="walk-time" placeholder="Hora de inicio" required>
-            <input type="tel" id="walker-owner-phone" placeholder="Número de WhatsApp del dueño" required>
-
-            <div class="walker-buttons">
-                <button class="btn" id="send-to-owner">Enviar al dueño 📤</button>
-                <button class="btn" id="send-to-amigoperro">Enviar a Amigo Perro 📤</button>
-            </div>
-
-            <button class="go-home" onclick="showSection('landing-page')">Volver al inicio 🏠</button>
-        </section>
-
+        </div>
     </div>
 
     <!-- Footer -->
-    <footer>
-        <p>Amigo Perro © 2024. Todos los derechos reservados 🐕‍🦺</p>
-        <a class="instagram-btn" href="https://www.instagram.com/amigo.perro.cdmx?igsh=N2g2aXQzZG1kb3M3" target="_blank">Visítanos en Instagram 📸</a>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Amigo Perro</h4>
+                    <p>Conectando paseadores y dueños de perros en México</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces</h4>
+                    <a href="#" onclick="showSection('services')">Servicios</a>
+                    <a href="#" onclick="showSection('about')">Nosotros</a>
+                    <a href="#" onclick="showSection('contact')">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociales</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/amigo.perro.cdmx" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" onclick="openWhatsApp()">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Amigo Perro. Todos los derechos reservados.</p>
+            </div>
+        </div>
     </footer>
 
-    <script src="script.js"></script>
-    
+    <!-- Firebase SDK -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
