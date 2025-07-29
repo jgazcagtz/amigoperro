@@ -392,14 +392,12 @@ async function handleLogin(e) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             
-            if (loginType === 'admin' && email === 'gascagtz@gmail.com') {
-                userType = 'admin';
-                showSection('dashboard');
-                showNotification('Bienvenido Administrador', 'success');
-            } else if (userData.userType === loginType) {
+            if (userData.userType === loginType) {
                 userType = userData.userType;
+                currentUser = userCredential.user;
                 showSection('dashboard');
                 showNotification(`Bienvenido ${userData.name}`, 'success');
+                loadUserData();
             } else {
                 await signOut(auth);
                 showNotification('Tipo de usuario incorrecto', 'error');
@@ -425,8 +423,6 @@ async function loadUserData() {
                 loadOwnerDashboard();
             } else if (userType === 'walker') {
                 loadWalkerDashboard();
-            } else if (userType === 'admin') {
-                loadAdminDashboard();
             }
             
             showSection('dashboard');
@@ -471,16 +467,7 @@ async function loadWalkerDashboard() {
     await loadWalkerRatings();
 }
 
-async function loadAdminDashboard() {
-    const dashboardContent = document.getElementById('admin-dashboard');
-    dashboardContent.classList.add('active');
-    
-    // Load admin statistics
-    await loadAdminStats();
-    
-    // Load active walks for admin
-    await loadAdminActiveWalks();
-}
+
 
 // Dog Management
 async function loadDogsList() {
@@ -676,56 +663,7 @@ async function startWalk(walkId) {
     }
 }
 
-// Admin Dashboard Functions
-async function loadAdminStats() {
-    try {
-        // Count owners
-        const ownersQuery = query(collection(db, 'users'), where('userType', '==', 'owner'));
-        const ownersSnapshot = await getDocs(ownersQuery);
-        
-        // Count walkers
-        const walkersQuery = query(collection(db, 'users'), where('userType', '==', 'walker'));
-        const walkersSnapshot = await getDocs(walkersQuery);
-        
-        // Count dogs
-        const dogsSnapshot = await getDocs(collection(db, 'dogs'));
-        
-        document.getElementById('total-owners').textContent = ownersSnapshot.size;
-        document.getElementById('total-walkers').textContent = walkersSnapshot.size;
-        document.getElementById('total-dogs').textContent = dogsSnapshot.size;
-    } catch (error) {
-        console.error('Error loading admin stats:', error);
-    }
-}
 
-async function loadAdminActiveWalks() {
-    const adminActiveWalks = document.getElementById('admin-active-walks');
-    try {
-        const walksQuery = query(
-            collection(db, 'walks'),
-            where('status', '==', 'active')
-        );
-        const walksSnapshot = await getDocs(walksQuery);
-        
-        let walksHTML = '';
-        walksSnapshot.forEach(doc => {
-            const walk = doc.data();
-            walksHTML += `
-                <div class="walk-item">
-                    <h4>Paseo en Curso</h4>
-                    <p><strong>Perro:</strong> ${walk.dogName}</p>
-                    <p><strong>Paseador:</strong> ${walk.walkerName}</p>
-                    <p><strong>Dueño:</strong> ${walk.ownerName}</p>
-                    <p><strong>Iniciado:</strong> ${new Date(walk.startTime.toDate()).toLocaleTimeString()}</p>
-                </div>
-            `;
-        });
-        
-        adminActiveWalks.innerHTML = walksHTML || '<p>No hay paseos activos</p>';
-    } catch (error) {
-        console.error('Error loading admin active walks:', error);
-    }
-}
 
 // Utility Functions
 function showNotification(message, type = 'info') {
@@ -795,10 +733,7 @@ window.logout = function() {
     });
 }
 
-window.generateReport = function() {
-    // This would generate a comprehensive report
-    showNotification('Reporte generado y descargado', 'success');
-}
+
 
 // Additional functions for walker dashboard
 async function loadActiveWalks() {

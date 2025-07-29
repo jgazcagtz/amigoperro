@@ -12,7 +12,7 @@ A professional web application for connecting dog owners with reliable dog walke
 ### 👥 **User Registration**
 - **Dog Owner Registration**: Complete profile with dog information
 - **Walker Registration**: Professional walker profiles with experience and zones
-- **Admin Access**: Master admin dashboard for platform management
+- **Free Connection Service**: No fees, no commissions - just connecting people
 
 ### 🔐 **Authentication System**
 - Secure Firebase Authentication
@@ -22,7 +22,6 @@ A professional web application for connecting dog owners with reliable dog walke
 ### 📱 **Dashboard System**
 - **Owner Dashboard**: Manage dogs, view scheduled walks, and walk history
 - **Walker Dashboard**: View pending walks, active walks, and complete walk history
-- **Admin Dashboard**: Platform statistics, user management, and active walk monitoring
 
 ### 🐕 **Dog Management**
 - Add and manage multiple dogs per owner
@@ -39,11 +38,11 @@ A professional web application for connecting dog owners with reliable dog walke
 - Automated walk notifications to owners and walkers
 - Real-time communication during walks
 
-### 📊 **Admin Features**
-- User statistics (owners, walkers, dogs)
-- Active walk monitoring
-- Report generation
-- Platform management tools
+### 📊 **Platform Features**
+- User ratings and reviews
+- WhatsApp integration for direct communication
+- Real-time walk tracking
+- Mobile-optimized interface
 
 ## Technology Stack
 
@@ -106,12 +105,6 @@ amigoperro/
 - Start and end walks with real-time tracking
 - Complete walk history and earnings
 
-### 👨‍💼 **Administrator**
-- Master access to all platform data
-- View user statistics and active walks
-- Generate reports and manage the platform
-- Monitor walk progress in real-time
-
 ## Key Features
 
 ### 🔒 **Security**
@@ -144,11 +137,12 @@ The app includes comprehensive WhatsApp integration:
 - **Real-time Updates**: Live walk progress updates
 - **Customer Support**: Direct line to Amigo Perro team
 
-## Admin Credentials
+## Service Model
 
-- **Email**: admin@amigoperro.com
-- **Password**: admin123456
-- **Access**: Full platform management capabilities
+- **Free Connection**: No fees for users
+- **Direct Communication**: Users connect directly via WhatsApp
+- **No Commissions**: We don't take any percentage from transactions
+- **Community Focus**: Building a trusted community of dog lovers
 
 ## Database Collections
 

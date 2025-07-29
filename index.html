@@ -71,30 +71,42 @@
         <section id="services" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>🐾 Nuestros Servicios Premium</h2>
-                    <p class="section-subtitle">Conectamos el amor por los perros con el profesionalismo que merecen</p>
+                    <h2>🐾 Nuestro Servicio Gratuito</h2>
+                    <p class="section-subtitle">Conectamos dueños de perros con paseadores profesionales - ¡Completamente gratis!</p>
                 </div>
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">
-                            <i class="fas fa-dog"></i>
+                            <i class="fas fa-handshake"></i>
                         </div>
-                        <h3>Paseos Personalizados</h3>
-                        <p>Cada perro es único. Ofrecemos paseos adaptados a la edad, raza, energía y necesidades especiales de tu mejor amigo.</p>
+                        <h3>Conexión Directa</h3>
+                        <p>Conectamos dueños de perros con paseadores profesionales de tu zona. Sin intermediarios, sin comisiones.</p>
                         <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Rutas seguras y verificadas</li>
-                            <li><i class="fas fa-check"></i> Duración personalizada</li>
-                            <li><i class="fas fa-check"></i> Reportes detallados</li>
+                            <li><i class="fas fa-check"></i> Conexión gratuita</li>
+                            <li><i class="fas fa-check"></i> Sin comisiones</li>
+                            <li><i class="fas fa-check"></i> Contacto directo</li>
+                        </ul>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Paseadores Locales</h3>
+                        <p>Encuentra paseadores en tu zona. Desde Polanco hasta Iztapalapa, tenemos paseadores en toda la CDMX.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Todas las alcaldías</li>
+                            <li><i class="fas fa-check"></i> Paseadores verificados</li>
+                            <li><i class="fas fa-check"></i> Respuesta rápida</li>
                         </ul>
                     </div>
                     <div class="service-card">
                         <div class="service-icon">
                             <i class="fas fa-clock"></i>
                         </div>
-                        <h3>Horarios 24/7</h3>
-                        <p>Entendemos que la vida es ocupada. Disponemos paseadores disponibles en cualquier momento del día.</p>
+                        <h3>Horarios Flexibles</h3>
+                        <p>Paseadores disponibles en cualquier momento del día. Reservas de última hora y paseos de emergencia.</p>
                         <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Reservas de última hora</li>
+                            <li><i class="fas fa-check"></i> 24/7 disponible</li>
                             <li><i class="fas fa-check"></i> Paseos de emergencia</li>
                             <li><i class="fas fa-check"></i> Flexibilidad total</li>
                         </ul>
@@ -104,23 +116,11 @@
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <h3>Paseadores Verificados</h3>
-                        <p>Tu tranquilidad es nuestra prioridad. Todos nuestros paseadores pasan por rigurosos procesos de verificación.</p>
+                        <p>Tu tranquilidad es nuestra prioridad. Todos nuestros paseadores pasan por procesos de verificación.</p>
                         <ul class="service-features">
                             <li><i class="fas fa-check"></i> Verificación de antecedentes</li>
-                            <li><i class="fas fa-check"></i> Entrenamiento especializado</li>
+                            <li><i class="fas fa-check"></i> Experiencia comprobada</li>
                             <li><i class="fas fa-check"></i> Seguro de responsabilidad</li>
-                        </ul>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Cobertura CDMX</h3>
-                        <p>Servicio disponible en toda la Ciudad de México. Desde Polanco hasta Iztapalapa, estamos cerca de ti.</p>
-                        <ul class="service-features">
-                            <li><i class="fas fa-check"></i> Todas las alcaldías</li>
-                            <li><i class="fas fa-check"></i> Paseadores locales</li>
-                            <li><i class="fas fa-check"></i> Respuesta rápida</li>
                         </ul>
                     </div>
                     <div class="service-card">
@@ -139,11 +139,11 @@
                         <div class="service-icon">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
-                        <h3>App Intuitiva</h3>
-                        <p>Gestiona todo desde tu celular. Reservas, seguimiento en tiempo real y comunicación directa.</p>
+                        <h3>Plataforma Intuitiva</h3>
+                        <p>Gestiona todo desde tu celular. Encuentra paseadores, contacta y coordina paseos fácilmente.</p>
                         <ul class="service-features">
                             <li><i class="fas fa-check"></i> Interfaz fácil de usar</li>
-                            <li><i class="fas fa-check"></i> Notificaciones instantáneas</li>
+                            <li><i class="fas fa-check"></i> WhatsApp integrado</li>
                             <li><i class="fas fa-check"></i> Historial completo</li>
                         </ul>
                     </div>
@@ -486,7 +486,6 @@
                                 <option value="">Seleccionar tipo</option>
                                 <option value="owner">Dueño de Perro</option>
                                 <option value="walker">Paseador</option>
-                                <option value="admin">Administrador</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
@@ -578,38 +577,7 @@
                     </div>
                 </div>
 
-                <!-- Admin Dashboard -->
-                <div id="admin-dashboard" class="dashboard-content">
-                    <div class="dashboard-grid">
-                        <div class="dashboard-card">
-                            <h3>Usuarios Registrados</h3>
-                            <div class="admin-stats">
-                                <div class="stat">
-                                    <span class="stat-number" id="total-owners">0</span>
-                                    <span class="stat-label">Dueños</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-number" id="total-walkers">0</span>
-                                    <span class="stat-label">Paseadores</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-number" id="total-dogs">0</span>
-                                    <span class="stat-label">Perros</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3>Paseos Activos</h3>
-                            <div id="admin-active-walks"></div>
-                        </div>
-                        <div class="dashboard-card">
-                            <h3>Reportes</h3>
-                            <button class="btn btn-primary" onclick="generateReport()">
-                                <i class="fas fa-download"></i> Generar Reporte
-                            </button>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </section>
 
