@@ -54,6 +54,22 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
     }
     
+    // Dog ratings - allow walkers to rate dogs they've walked
+    match /dog-ratings/{ratingId} {
+      // Allow users to read dog ratings they gave
+      allow read: if request.auth != null && 
+        resource.data.raterId == request.auth.uid;
+      // Allow walkers to create dog ratings for walks they participated in
+      allow create: if request.auth != null && 
+        request.resource.data.raterId == request.auth.uid;
+      // Allow users to update their own dog ratings
+      allow update: if request.auth != null && 
+        resource.data.raterId == request.auth.uid;
+      // Allow admins to read all dog ratings
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
     // Allow authenticated users to create new documents
     match /{document=**} {
       allow create: if request.auth != null;

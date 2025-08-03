@@ -473,8 +473,9 @@ async function loadOwnerDashboard() {
     // Load walk history
     await loadWalkHistory();
     
-    // Load user ratings
+    // Load user ratings and update rating display
     await loadUserRatings();
+    await updateDashboardRatingDisplay('owner');
 }
 
 async function loadWalkerDashboard() {
@@ -493,8 +494,9 @@ async function loadWalkerDashboard() {
     // Load walker history
     await loadWalkerHistory();
     
-    // Load walker ratings
+    // Load walker ratings and update rating display
     await loadWalkerRatings();
+    await updateDashboardRatingDisplay('walker');
 }
 
 
@@ -693,14 +695,20 @@ async function loadWalkHistory() {
         const walksQuery = query(
             collection(db, 'walks'),
             where('ownerId', '==', currentUser.uid),
-            where('status', '==', 'completed'),
-            orderBy('date', 'desc')
+            where('status', '==', 'completed')
         );
         const walksSnapshot = await getDocs(walksQuery);
         
         let historyHTML = '';
+        const walks = [];
         walksSnapshot.forEach(doc => {
-            const walk = doc.data();
+            walks.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // Sort by date manually
+        walks.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        walks.forEach(walk => {
             historyHTML += `
                 <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
@@ -711,7 +719,7 @@ async function loadWalkHistory() {
                         </div>
                         <div class="walk-info-item">
                             <i class="fas fa-clock"></i>
-                            <span>${walk.duration} minutos</span>
+                            <span>${walk.duration || 'N/A'} minutos</span>
                         </div>
                         <div class="walk-info-item">
                             <i class="fas fa-user"></i>
@@ -720,6 +728,9 @@ async function loadWalkHistory() {
                     </div>
                     <div class="walk-actions">
                         <span class="walk-status completed">Completado</span>
+                        ${walk.canRate ? `<button class="btn btn-primary" onclick="rateUser('${walk.walkerId}', '${walk.walkerName}', '${walk.id}')">
+                            <i class="fas fa-star"></i> Calificar Paseador
+                        </button>` : ''}
                     </div>
                 </div>
             `;
@@ -742,51 +753,106 @@ async function loadAvailableWalks() {
         const walksSnapshot = await getDocs(walksQuery);
         
         let walksHTML = '';
+        const walks = [];
         walksSnapshot.forEach(doc => {
-            const walk = doc.data();
-            
-            // Get owner rating (default to 5.0 if not available)
-            const ownerRating = walk.ownerRating || 5.0;
-            
-            walksHTML += `
-                <div class="walk-card">
-                    <h4>Paseo con ${walk.dogName}</h4>
-                    <div class="walk-info">
-                        <div class="walk-info-item">
-                            <i class="fas fa-calendar"></i>
-                            <span>${new Date(walk.date).toLocaleDateString()}</span>
-                        </div>
-                        <div class="walk-info-item">
-                            <i class="fas fa-clock"></i>
-                            <span>${walk.time}</span>
-                        </div>
-                        <div class="walk-info-item">
-                            <i class="fas fa-hourglass-half"></i>
-                            <span>${walk.duration} min</span>
-                        </div>
-                        <div class="walk-info-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>${walk.zone}</span>
-                        </div>
-                        <div class="walk-info-item">
-                            <i class="fas fa-dollar-sign"></i>
-                            <span>${walk.budget ? `$${walk.budget} MXN` : 'Sin presupuesto'}</span>
-                        </div>
-                        <div class="walk-info-item">
-                            <i class="fas fa-star"></i>
-                            <span>Dueño: ${ownerRating.toFixed(1)} ⭐</span>
-                        </div>
-                    </div>
-                    ${walk.notes ? `<p><strong>Notas:</strong> ${walk.notes}</p>` : ''}
-                    <div class="walk-actions">
-                        <span class="walk-status pending">Disponible</span>
-                        <button class="btn btn-primary" onclick="acceptWalk('${doc.id}')">
-                            <i class="fas fa-check"></i> Aceptar Paseo
-                        </button>
-                    </div>
-                </div>
-            `;
+            walks.push({ id: doc.id, ...doc.data() });
         });
+        
+        // Process each walk and get owner ratings
+        for (const walk of walks) {
+            try {
+                // Get owner's rating
+                const ownerRating = await getUserRating(walk.ownerId);
+                
+                walksHTML += `
+                    <div class="walk-card">
+                        <h4>Paseo con ${walk.dogName}</h4>
+                        <div class="walk-info">
+                            <div class="walk-info-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>${new Date(walk.date).toLocaleDateString()}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${walk.time}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-hourglass-half"></i>
+                                <span>${walk.duration} min</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${walk.zone}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>${walk.budget ? `$${walk.budget} MXN` : 'Sin presupuesto'}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-user"></i>
+                                <span>Dueño: ${walk.ownerName}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-star"></i>
+                                <span>${ownerRating.averageRating.toFixed(1)} ⭐ (${ownerRating.ratingCount} reseñas)</span>
+                            </div>
+                        </div>
+                        ${walk.notes ? `<p><strong>Notas:</strong> ${walk.notes}</p>` : ''}
+                        <div class="walk-actions">
+                            <span class="walk-status pending">Disponible</span>
+                            <button class="btn btn-primary" onclick="acceptWalk('${walk.id}')">
+                                <i class="fas fa-check"></i> Aceptar Paseo
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error getting owner rating for walk:', walk.id, error);
+                // Fallback with default rating
+                walksHTML += `
+                    <div class="walk-card">
+                        <h4>Paseo con ${walk.dogName}</h4>
+                        <div class="walk-info">
+                            <div class="walk-info-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>${new Date(walk.date).toLocaleDateString()}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${walk.time}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-hourglass-half"></i>
+                                <span>${walk.duration} min</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${walk.zone}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>${walk.budget ? `$${walk.budget} MXN` : 'Sin presupuesto'}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-user"></i>
+                                <span>Dueño: ${walk.ownerName}</span>
+                            </div>
+                            <div class="walk-info-item">
+                                <i class="fas fa-star"></i>
+                                <span>5.0 ⭐ (Nuevo usuario)</span>
+                            </div>
+                        </div>
+                        ${walk.notes ? `<p><strong>Notas:</strong> ${walk.notes}</p>` : ''}
+                        <div class="walk-actions">
+                            <span class="walk-status pending">Disponible</span>
+                            <button class="btn btn-primary" onclick="acceptWalk('${walk.id}')">
+                                <i class="fas fa-check"></i> Aceptar Paseo
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
         
         availableWalks.innerHTML = walksHTML || '<p>No hay paseos disponibles</p>';
     } catch (error) {
@@ -946,7 +1012,7 @@ function getErrorMessage(errorCode) {
     return errorMessages[errorCode] || 'Error desconocido';
 }
 
-// Global Functions for HTML onclick
+// Global functions for HTML onclick
 window.acceptWalk = async function(walkId) {
     try {
         // Show confirmation dialog
@@ -1024,26 +1090,7 @@ window.startWalk = async function(walkId) {
     }
 }
 
-window.endWalk = async function(walkId) {
-    try {
-        if (!confirm('¿Has completado el paseo?')) {
-            return;
-        }
-        
-        await updateDoc(doc(db, 'walks', walkId), {
-            status: 'completed',
-            endTime: new Date()
-        });
-        
-        showNotification('Paseo completado. El dueño puede calificarte.', 'success');
-        loadActiveWalks();
-        loadAcceptedWalks();
-    } catch (error) {
-        console.error('Error ending walk:', error);
-        showNotification('Error al completar paseo', 'error');
-    }
-}
-
+window.endWalk = endWalk;
 window.cancelWalk = async function(walkId) {
     try {
         if (!confirm('¿Estás seguro de que quieres cancelar este paseo?')) {
@@ -1098,6 +1145,16 @@ window.rateUser = async function(userId, userName, walkId) {
     }
 }
 
+window.confirmWalkWithOwner = confirmWalkWithOwner;
+window.completeWalkAsOwner = completeWalkAsOwner;
+window.closeScheduleModal = closeScheduleModal;
+window.showAddDogModal = showAddDogModal;
+window.showScheduleWalkModal = showScheduleWalkModal;
+window.selectService = function(serviceName, price) {
+    const message = encodeURIComponent(`Hola! Me interesa contratar: ${serviceName} - $${price} MXN`);
+    window.openWhatsAppWithMessage(message);
+}
+
 window.openWhatsApp = function() {
     const message = encodeURIComponent('Hola! Me interesa el servicio de paseos de Amigo Perro 🐾');
     window.open(`https://wa.me/525527204437?text=${message}`, '_blank');
@@ -1123,7 +1180,7 @@ window.showScheduleWalkModal = function() {
 
 window.selectService = function(serviceName, price) {
     const message = encodeURIComponent(`Hola! Me interesa contratar: ${serviceName} - $${price} MXN`);
-    window.open(`https://wa.me/525527204437?text=${message}`, '_blank');
+    window.openWhatsAppWithMessage(message);
 }
 
 window.logout = function() {
@@ -1222,6 +1279,9 @@ async function loadActiveWalksOwner() {
                     </div>
                     <div class="walk-actions">
                         <span class="walk-status active">En Curso</span>
+                        <button class="btn btn-primary" onclick="completeWalkAsOwner('${doc.id}')">
+                            <i class="fas fa-check"></i> Completar Paseo
+                        </button>
                     </div>
                 </div>
             `;
@@ -1233,28 +1293,101 @@ async function loadActiveWalksOwner() {
     }
 }
 
+// Function for owners to complete walks and rate walkers
+async function completeWalkAsOwner(walkId) {
+    try {
+        if (!confirm('¿Confirmas que el paseo ha sido completado?')) {
+            return;
+        }
+        
+        const walkDoc = await getDoc(doc(db, 'walks', walkId));
+        const walkData = walkDoc.data();
+        
+        if (!walkData) {
+            showNotification('Paseo no encontrado', 'error');
+            return;
+        }
+        
+        const endTime = new Date();
+        const startTime = walkData.startTime ? walkData.startTime.toDate() : new Date();
+        const duration = Math.round((endTime - startTime) / 60000); // Duration in minutes
+        
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'completed',
+            endTime: endTime,
+            duration: duration,
+            canRate: true
+        });
+        
+        showNotification('Paseo completado. Ambos pueden calificarse.', 'success');
+        
+        // Show rating prompt for owner to rate walker
+        const shouldRateWalker = confirm('¿Quieres calificar al paseador?');
+        if (shouldRateWalker) {
+            await rateUser(walkData.walkerId, walkData.walkerName, walkId);
+        }
+        
+        loadActiveWalksOwner();
+        loadWalkHistory();
+    } catch (error) {
+        console.error('Error completing walk as owner:', error);
+        showNotification('Error al completar paseo', 'error');
+    }
+}
+
+// Function for walkers to end walks and rate owners
 async function endWalk(walkId) {
     try {
         if (!confirm('¿Has completado el paseo?')) {
             return;
         }
         
+        const walkDoc = await getDoc(doc(db, 'walks', walkId));
+        const walkData = walkDoc.data();
+        
+        if (!walkData) {
+            showNotification('Paseo no encontrado', 'error');
+            return;
+        }
+        
         const endTime = new Date();
+        const startTime = walkData.startTime ? walkData.startTime.toDate() : new Date();
+        const duration = Math.round((endTime - startTime) / 60000); // Duration in minutes
+        
         await updateDoc(doc(db, 'walks', walkId), {
             status: 'completed',
             endTime: endTime,
-            duration: Math.round((endTime - new Date()) / 60000), // Duration in minutes
+            duration: duration,
             canRate: true
         });
         
         showNotification('Paseo completado. Ambos pueden calificarse.', 'success');
         
-        // Show rating prompt
-        const shouldRate = confirm('¿Quieres calificar al dueño?');
-        if (shouldRate) {
-            const walkDoc = await getDoc(doc(db, 'walks', walkId));
-            const walkData = walkDoc.data();
+        // Show rating prompt for walker to rate owner
+        const shouldRateOwner = confirm('¿Quieres calificar al dueño?');
+        if (shouldRateOwner) {
             await rateUser(walkData.ownerId, walkData.ownerName, walkId);
+        }
+        
+        // Show rating prompt for walker to rate dog (optional)
+        const shouldRateDog = confirm('¿Quieres calificar al perro? (Opcional)');
+        if (shouldRateDog) {
+            const dogRating = prompt('Califica al perro de 1 a 5 estrellas:');
+            const dogRatingNum = parseInt(dogRating);
+            if (!isNaN(dogRatingNum) && dogRatingNum >= 1 && dogRatingNum <= 5) {
+                const dogComment = prompt('Comentario sobre el perro (opcional):') || '';
+                await addDoc(collection(db, 'dog-ratings'), {
+                    walkId: walkId,
+                    dogId: walkData.dogId,
+                    dogName: walkData.dogName,
+                    raterId: currentUser.uid,
+                    raterName: currentUser.displayName || currentUser.email,
+                    rating: dogRatingNum,
+                    comment: dogComment,
+                    createdAt: new Date()
+                });
+                showNotification('Calificación del perro enviada', 'success');
+            }
         }
         
         loadActiveWalks();
@@ -1262,21 +1395,6 @@ async function endWalk(walkId) {
     } catch (error) {
         console.error('Error ending walk:', error);
         showNotification('Error al finalizar paseo', 'error');
-    }
-}
-
-async function cancelWalk(walkId) {
-    try {
-        await updateDoc(doc(db, 'walks', walkId), {
-            status: 'cancelled',
-            cancelledAt: new Date()
-        });
-        
-        showNotification('Paseo cancelado', 'success');
-        loadScheduledWalks();
-    } catch (error) {
-        console.error('Error cancelling walk:', error);
-        showNotification('Error al cancelar paseo', 'error');
     }
 }
 
@@ -1425,6 +1543,27 @@ function generateStars(rating) {
 }
 
 // Rating System Functions
+async function updateDashboardRatingDisplay(userType) {
+    try {
+        const userRating = await getUserRating(currentUser.uid);
+        const ratingContainer = userType === 'owner' ? 
+            document.querySelector('#owner-dashboard .rating-summary') : 
+            document.querySelector('#walker-dashboard .rating-summary');
+        
+        if (ratingContainer) {
+            const ratingNumber = ratingContainer.querySelector('.rating-number');
+            const starsContainer = ratingContainer.querySelector('.stars');
+            const ratingCount = ratingContainer.querySelector('.rating-count');
+            
+            if (ratingNumber) ratingNumber.textContent = userRating.averageRating.toFixed(1);
+            if (starsContainer) starsContainer.innerHTML = generateStars(userRating.averageRating);
+            if (ratingCount) ratingCount.textContent = `(${userRating.ratingCount} reseñas)`;
+        }
+    } catch (error) {
+        console.error('Error updating dashboard rating display:', error);
+    }
+}
+
 async function updateUserAverageRating(userId) {
     try {
         const ratingsQuery = query(
