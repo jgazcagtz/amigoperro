@@ -1252,3 +1252,39 @@ window.openWhatsApp = function() {
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
 }
+
+// Contact form functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('contact-name').value;
+            const subject = document.getElementById('contact-subject').value;
+            const message = document.getElementById('contact-message').value;
+            
+            // Create WhatsApp message
+            const subjectText = {
+                'consulta': 'Consulta General',
+                'paseos': 'Paseos y Entrenamiento',
+                'cursos': 'Cursos de Adiestramiento',
+                'emergencia': 'Paseo de Emergencia',
+                'precios': 'Consulta de Precios',
+                'otro': 'Otro'
+            }[subject] || 'Consulta';
+            
+            const whatsappMessage = `¡Hola! Soy ${name} y tengo una consulta sobre: ${subjectText}
+
+${message}
+
+Espero su respuesta. ¡Gracias! 🐾`;
+            
+            // Open WhatsApp with the message
+            window.openWhatsAppWithMessage(whatsappMessage);
+            
+            // Reset form
+            contactForm.reset();
+        });
+    }
+});

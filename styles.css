@@ -380,6 +380,117 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
+/* Hero CTA Section */
+.hero-cta {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    margin-top: 3rem;
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-cta .cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.hero-cta p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-features {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.cta-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cta-feature i {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+}
+
+.cta-feature span {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+    min-width: 180px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.cta-buttons .btn-primary {
+    background: var(--white);
+    color: var(--primary-color);
+    border: 2px solid var(--white);
+}
+
+.cta-buttons .btn-primary:hover {
+    background: transparent;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.cta-buttons .btn-accent {
+    background: var(--accent-color);
+    color: var(--white);
+    border: 2px solid var(--accent-color);
+}
+
+.cta-buttons .btn-accent:hover {
+    background: transparent;
+    color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -2036,6 +2147,39 @@ body {
 
     .dashboard-card {
         padding: 1.5rem;
+    }
+
+    .hero-cta {
+        margin-top: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .hero-cta h2 {
+        font-size: 1.8rem;
+    }
+
+    .hero-cta p {
+        font-size: 1rem;
+    }
+
+    .cta-features {
+        gap: 1rem;
+    }
+
+    .cta-feature {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-buttons .btn {
+        min-width: 200px;
+        width: 100%;
+        max-width: 300px;
     }
 
 
