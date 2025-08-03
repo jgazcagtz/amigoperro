@@ -37,11 +37,18 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
     }
     
-    // Allow users to read and write ratings they're involved in
+    // Rating system - allow users to read and write ratings they're involved in
     match /ratings/{ratingId} {
-      allow read, write: if request.auth != null && 
+      // Allow users to read ratings they gave or received
+      allow read: if request.auth != null && 
         (resource.data.raterId == request.auth.uid || 
          resource.data.ratedUserId == request.auth.uid);
+      // Allow users to create ratings for walks they participated in
+      allow create: if request.auth != null && 
+        request.resource.data.raterId == request.auth.uid;
+      // Allow users to update their own ratings
+      allow update: if request.auth != null && 
+        resource.data.raterId == request.auth.uid;
       // Allow admins to read all ratings
       allow read: if request.auth != null && 
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';

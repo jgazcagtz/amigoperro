@@ -10,14 +10,17 @@ Amigo Perro es una plataforma que conecta dueños de perros con paseadores profe
 - Programación de paseos con detalles específicos
 - Seguimiento del estado de los paseos
 - Historial de paseos completados
-- Sistema de calificaciones para paseadores
+- **Sistema de calificaciones bidireccional** - Califica a paseadores y recibe calificaciones
+- **Confirmación de paseos** - Confirma con paseadores antes de iniciar
 
 ### Para Paseadores (Walkers)
 - **Ver todos los paseos disponibles**: Los paseadores pueden ver todos los paseos con estado 'pending' publicados por cualquier dueño
+- **Sistema de calificaciones bidireccional** - Califica a dueños y recibe calificaciones
+- **Workflow de confirmación** - Debe contactar al dueño para confirmar antes de iniciar
 - Aceptar paseos disponibles
 - Gestionar paseos activos
 - Historial de paseos completados
-- Sistema de calificaciones
+- **Calificaciones tipo Uber** - Todos los usuarios empiezan con 5 estrellas
 
 ## Visibilidad de Paseos
 
@@ -31,6 +34,8 @@ Amigo Perro es una plataforma que conecta dueños de perros con paseadores profe
 - **Lectura de paseos pendientes**: Cualquier usuario autenticado puede leer paseos con estado 'pending'
 - **Escritura de paseos**: Solo el dueño del paseo o el paseador asignado pueden modificar un paseo
 - **Paseos aceptados**: Solo el dueño y el paseador asignado pueden ver paseos con estado 'accepted' o 'active'
+- **Sistema de calificaciones**: Los usuarios solo pueden calificar paseos en los que participaron
+- **Confirmación obligatoria**: Los paseadores deben confirmar con dueños antes de iniciar
 
 ## Configuración de Firebase
 
@@ -41,18 +46,26 @@ Las reglas de seguridad permiten:
 - Gestión completa de usuarios, perros y calificaciones
 
 ### Colecciones de Datos
-- `users`: Información de usuarios (dueños y paseadores)
+- `users`: Información de usuarios (dueños y paseadores) con sistema de calificaciones
 - `dogs`: Información de perros registrados
-- `walks`: Paseos programados y su estado
-- `ratings`: Calificaciones entre usuarios
+- `walks`: Paseos programados y su estado con workflow de confirmación
+- `ratings`: Calificaciones bidireccionales entre usuarios con validación
 
 ## Instalación y Configuración
 
 1. Clona el repositorio
 2. Configura Firebase en tu proyecto
 3. Copia las reglas de Firestore desde `firestore-rules.txt`
-4. Configura la autenticación de Firebase
-5. Ejecuta la aplicación
+4. **Crea los índices requeridos** (ver `firebase-indexes.json`)
+5. Configura la autenticación de Firebase
+6. Ejecuta la aplicación
+
+### Configuración del Sistema de Calificaciones
+
+1. **Actualiza las reglas de Firestore** con las nuevas reglas para ratings
+2. **Crea los índices de Firebase** para evitar errores de consulta
+3. **Prueba el workflow de confirmación** entre dueños y paseadores
+4. **Verifica el sistema de calificaciones** con usuarios de prueba
 
 ## Tecnologías Utilizadas
 - HTML5, CSS3, JavaScript (ES6+)

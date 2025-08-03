@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, getDocs, collection, addDoc, updateDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, getDocs, collection, addDoc, updateDoc, query, where, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB0AxTASTitXDaf69ZJm9q4YruFvo2ESEo",
@@ -311,10 +311,14 @@ async function handleOwnerRegistration(e) {
         // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
         
-        // Save user data to Firestore
+        // Save user data to Firestore with default rating
         await setDoc(doc(db, 'users', userCredential.user.uid), {
             ...userData,
-            uid: userCredential.user.uid
+            uid: userCredential.user.uid,
+            // Rating system - all users start with 5 stars
+            averageRating: 5.0,
+            totalRatings: 0,
+            ratingCount: 0
         });
         
         showNotification('Registro exitoso! Bienvenido a Amigo Perro', 'success');
@@ -374,10 +378,14 @@ async function handleWalkerRegistration(e) {
         // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
         
-        // Save user data to Firestore
+        // Save user data to Firestore with default rating
         await setDoc(doc(db, 'users', userCredential.user.uid), {
             ...userData,
-            uid: userCredential.user.uid
+            uid: userCredential.user.uid,
+            // Rating system - all users start with 5 stars
+            averageRating: 5.0,
+            totalRatings: 0,
+            ratingCount: 0
         });
         
         showNotification('Registro exitoso! Tu cuenta será verificada pronto', 'success');
@@ -736,6 +744,10 @@ async function loadAvailableWalks() {
         let walksHTML = '';
         walksSnapshot.forEach(doc => {
             const walk = doc.data();
+            
+            // Get owner rating (default to 5.0 if not available)
+            const ownerRating = walk.ownerRating || 5.0;
+            
             walksHTML += `
                 <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
@@ -759,6 +771,10 @@ async function loadAvailableWalks() {
                         <div class="walk-info-item">
                             <i class="fas fa-dollar-sign"></i>
                             <span>${walk.budget ? `$${walk.budget} MXN` : 'Sin presupuesto'}</span>
+                        </div>
+                        <div class="walk-info-item">
+                            <i class="fas fa-star"></i>
+                            <span>Dueño: ${ownerRating.toFixed(1)} ⭐</span>
                         </div>
                     </div>
                     ${walk.notes ? `<p><strong>Notas:</strong> ${walk.notes}</p>` : ''}
@@ -821,6 +837,9 @@ async function loadAcceptedWalks() {
                     </div>
                     <div class="walk-actions">
                         <span class="walk-status accepted">Aceptado</span>
+                        <button class="btn btn-secondary" onclick="confirmWalkWithOwner('${doc.id}')">
+                            <i class="fas fa-phone"></i> Confirmar con Dueño
+                        </button>
                         <button class="btn btn-primary" onclick="startWalk('${doc.id}')">
                             <i class="fas fa-play"></i> Iniciar Paseo
                         </button>
@@ -832,6 +851,7 @@ async function loadAcceptedWalks() {
         acceptedWalks.innerHTML = walksHTML || '<p>No hay paseos aceptados</p>';
     } catch (error) {
         console.error('Error loading accepted walks:', error);
+        acceptedWalks.innerHTML = '<p>Error al cargar paseos aceptados</p>';
     }
 }
 
@@ -926,6 +946,158 @@ function getErrorMessage(errorCode) {
     return errorMessages[errorCode] || 'Error desconocido';
 }
 
+// Global Functions for HTML onclick
+window.acceptWalk = async function(walkId) {
+    try {
+        // Show confirmation dialog
+        if (!confirm('¿Estás seguro de que quieres aceptar este paseo? Una vez aceptado, deberás contactar al dueño para confirmar.')) {
+            return;
+        }
+
+        // Get walker info
+        const walkerDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        const walkerData = walkerDoc.data();
+        
+        // Get walk info to contact owner
+        const walkDoc = await getDoc(doc(db, 'walks', walkId));
+        const walkData = walkDoc.data();
+        
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'accepted',
+            walkerId: currentUser.uid,
+            walkerName: walkerData.name,
+            walkerPhone: walkerData.phone,
+            acceptedAt: new Date()
+        });
+        
+        showNotification('Paseo aceptado exitosamente. Contacta al dueño para confirmar.', 'success');
+        
+        // Show contact info for owner
+        const ownerContact = `Contacta al dueño: ${walkData.ownerName} - ${walkData.ownerPhone}`;
+        alert(`${ownerContact}\n\nWhatsApp: ${walkData.ownerPhone}\n\nConfirma con el dueño antes de iniciar el paseo.`);
+        
+        loadAvailableWalks();
+        loadAcceptedWalks();
+    } catch (error) {
+        console.error('Error accepting walk:', error);
+        showNotification('Error al aceptar paseo', 'error');
+    }
+}
+
+window.confirmWalkWithOwner = async function(walkId) {
+    try {
+        const walkDoc = await getDoc(doc(db, 'walks', walkId));
+        const walkData = walkDoc.data();
+        
+        if (confirm(`¿Has confirmado con el dueño ${walkData.ownerName} que puedes iniciar el paseo?`)) {
+            await updateDoc(doc(db, 'walks', walkId), {
+                status: 'confirmed',
+                confirmedAt: new Date()
+            });
+            
+            showNotification('Paseo confirmado con el dueño', 'success');
+            loadAcceptedWalks();
+        }
+    } catch (error) {
+        console.error('Error confirming walk:', error);
+        showNotification('Error al confirmar paseo', 'error');
+    }
+}
+
+window.startWalk = async function(walkId) {
+    try {
+        if (!confirm('¿Estás listo para iniciar el paseo?')) {
+            return;
+        }
+        
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'active',
+            startTime: new Date()
+        });
+        
+        showNotification('Paseo iniciado', 'success');
+        loadAcceptedWalks();
+        loadActiveWalks();
+    } catch (error) {
+        console.error('Error starting walk:', error);
+        showNotification('Error al iniciar paseo', 'error');
+    }
+}
+
+window.endWalk = async function(walkId) {
+    try {
+        if (!confirm('¿Has completado el paseo?')) {
+            return;
+        }
+        
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'completed',
+            endTime: new Date()
+        });
+        
+        showNotification('Paseo completado. El dueño puede calificarte.', 'success');
+        loadActiveWalks();
+        loadAcceptedWalks();
+    } catch (error) {
+        console.error('Error ending walk:', error);
+        showNotification('Error al completar paseo', 'error');
+    }
+}
+
+window.cancelWalk = async function(walkId) {
+    try {
+        if (!confirm('¿Estás seguro de que quieres cancelar este paseo?')) {
+            return;
+        }
+        
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'cancelled',
+            cancelledAt: new Date()
+        });
+        
+        showNotification('Paseo cancelado', 'success');
+        loadScheduledWalks();
+    } catch (error) {
+        console.error('Error cancelling walk:', error);
+        showNotification('Error al cancelar paseo', 'error');
+    }
+}
+
+window.rateUser = async function(userId, userName, walkId) {
+    try {
+        const rating = prompt('Califica de 1 a 5 estrellas:');
+        const ratingNum = parseInt(rating);
+        
+        if (isNaN(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+            showNotification('Por favor ingresa un número del 1 al 5', 'error');
+            return;
+        }
+        
+        const comment = prompt('Comentario (opcional):') || '';
+        
+        // Create rating document
+        await addDoc(collection(db, 'ratings'), {
+            raterId: currentUser.uid,
+            raterName: currentUser.displayName || currentUser.email,
+            ratedUserId: userId,
+            ratedUserName: userName,
+            walkId: walkId,
+            rating: ratingNum,
+            comment: comment,
+            createdAt: new Date()
+        });
+        
+        // Update user's average rating
+        await updateUserAverageRating(userId);
+        
+        showNotification('Calificación enviada exitosamente', 'success');
+        loadUserRatings();
+    } catch (error) {
+        console.error('Error rating user:', error);
+        showNotification('Error al enviar calificación', 'error');
+    }
+}
+
 window.openWhatsApp = function() {
     const message = encodeURIComponent('Hola! Me interesa el servicio de paseos de Amigo Perro 🐾');
     window.open(`https://wa.me/525527204437?text=${message}`, '_blank');
@@ -933,6 +1105,25 @@ window.openWhatsApp = function() {
 
 window.closeModal = function() {
     document.getElementById('modal-overlay').classList.remove('active');
+}
+
+window.closeScheduleModal = function() {
+    document.getElementById('schedule-walk-modal').style.display = 'none';
+}
+
+window.showAddDogModal = function() {
+    // Implementation for adding dog modal
+    alert('Función de agregar perro próximamente');
+}
+
+window.showScheduleWalkModal = function() {
+    document.getElementById('schedule-walk-modal').style.display = 'flex';
+    loadDogsForSchedule();
+}
+
+window.selectService = function(serviceName, price) {
+    const message = encodeURIComponent(`Hola! Me interesa contratar: ${serviceName} - $${price} MXN`);
+    window.open(`https://wa.me/525527204437?text=${message}`, '_blank');
 }
 
 window.logout = function() {
@@ -1044,14 +1235,28 @@ async function loadActiveWalksOwner() {
 
 async function endWalk(walkId) {
     try {
+        if (!confirm('¿Has completado el paseo?')) {
+            return;
+        }
+        
         const endTime = new Date();
         await updateDoc(doc(db, 'walks', walkId), {
             status: 'completed',
             endTime: endTime,
-            duration: Math.round((endTime - new Date()) / 60000) // Duration in minutes
+            duration: Math.round((endTime - new Date()) / 60000), // Duration in minutes
+            canRate: true
         });
         
-        showNotification('Paseo finalizado', 'success');
+        showNotification('Paseo completado. Ambos pueden calificarse.', 'success');
+        
+        // Show rating prompt
+        const shouldRate = confirm('¿Quieres calificar al dueño?');
+        if (shouldRate) {
+            const walkDoc = await getDoc(doc(db, 'walks', walkId));
+            const walkData = walkDoc.data();
+            await rateUser(walkData.ownerId, walkData.ownerName, walkId);
+        }
+        
         loadActiveWalks();
         loadWalkerHistory();
     } catch (error) {
@@ -1078,17 +1283,24 @@ async function cancelWalk(walkId) {
 async function loadWalkerHistory() {
     const walkerHistory = document.getElementById('walker-history');
     try {
+        // Simplified query to avoid index issues
         const walksQuery = query(
             collection(db, 'walks'),
             where('walkerId', '==', currentUser.uid),
-            where('status', '==', 'completed'),
-            orderBy('date', 'desc')
+            where('status', '==', 'completed')
         );
         const walksSnapshot = await getDocs(walksQuery);
         
         let historyHTML = '';
+        const walks = [];
         walksSnapshot.forEach(doc => {
-            const walk = doc.data();
+            walks.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // Sort by date manually
+        walks.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        walks.forEach(walk => {
             historyHTML += `
                 <div class="walk-card">
                     <h4>Paseo con ${walk.dogName}</h4>
@@ -1108,6 +1320,9 @@ async function loadWalkerHistory() {
                     </div>
                     <div class="walk-actions">
                         <span class="walk-status completed">Completado</span>
+                        ${walk.canRate ? `<button class="btn btn-primary" onclick="rateUser('${walk.ownerId}', '${walk.ownerName}', '${walk.id}')">
+                            <i class="fas fa-star"></i> Calificar Dueño
+                        </button>` : ''}
                     </div>
                 </div>
             `;
@@ -1116,6 +1331,7 @@ async function loadWalkerHistory() {
         walkerHistory.innerHTML = historyHTML || '<p>No hay historial de paseos</p>';
     } catch (error) {
         console.error('Error loading walker history:', error);
+        walkerHistory.innerHTML = '<p>Error al cargar historial</p>';
     }
 }
 
@@ -1156,16 +1372,23 @@ async function loadUserRatings() {
 async function loadWalkerRatings() {
     const walkerRatings = document.getElementById('walker-ratings');
     try {
+        // Simplified query to avoid index issues
         const ratingsQuery = query(
             collection(db, 'ratings'),
-            where('ratedUserId', '==', currentUser.uid),
-            orderBy('createdAt', 'desc')
+            where('ratedUserId', '==', currentUser.uid)
         );
         const ratingsSnapshot = await getDocs(ratingsQuery);
         
         let ratingsHTML = '';
+        const ratings = [];
         ratingsSnapshot.forEach(doc => {
-            const rating = doc.data();
+            ratings.push({ id: doc.id, ...doc.data() });
+        });
+        
+        // Sort by date manually
+        ratings.sort((a, b) => new Date(b.createdAt.toDate()) - new Date(a.createdAt.toDate()));
+        
+        ratings.forEach(rating => {
             ratingsHTML += `
                 <div class="rating-item">
                     <div class="rating-header">
@@ -1183,6 +1406,7 @@ async function loadWalkerRatings() {
         walkerRatings.innerHTML = ratingsHTML || '<p>No hay calificaciones aún</p>';
     } catch (error) {
         console.error('Error loading walker ratings:', error);
+        walkerRatings.innerHTML = '<p>Error al cargar calificaciones</p>';
     }
 }
 
@@ -1198,6 +1422,164 @@ function generateStars(rating) {
         }
     }
     return stars;
+}
+
+// Rating System Functions
+async function updateUserAverageRating(userId) {
+    try {
+        const ratingsQuery = query(
+            collection(db, 'ratings'),
+            where('ratedUserId', '==', userId)
+        );
+        const ratingsSnapshot = await getDocs(ratingsQuery);
+        
+        let totalRating = 0;
+        let ratingCount = 0;
+        
+        ratingsSnapshot.forEach(doc => {
+            const rating = doc.data();
+            totalRating += rating.rating;
+            ratingCount++;
+        });
+        
+        const averageRating = ratingCount > 0 ? totalRating / ratingCount : 5.0;
+        
+        // Update user's rating in Firestore
+        await updateDoc(doc(db, 'users', userId), {
+            averageRating: averageRating,
+            totalRatings: totalRating,
+            ratingCount: ratingCount
+        });
+        
+        return averageRating;
+    } catch (error) {
+        console.error('Error updating user average rating:', error);
+        return 5.0;
+    }
+}
+
+async function getUserRating(userId) {
+    try {
+        const userDoc = await getDoc(doc(db, 'users', userId));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            return {
+                averageRating: userData.averageRating || 5.0,
+                ratingCount: userData.ratingCount || 0
+            };
+        }
+        return { averageRating: 5.0, ratingCount: 0 };
+    } catch (error) {
+        console.error('Error getting user rating:', error);
+        return { averageRating: 5.0, ratingCount: 0 };
+    }
+}
+
+async function displayUserRating(userId, containerId) {
+    try {
+        const rating = await getUserRating(userId);
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `
+                <div class="rating-display">
+                    <span class="rating-number">${rating.averageRating.toFixed(1)}</span>
+                    <div class="stars">
+                        ${generateStars(rating.averageRating)}
+                    </div>
+                    <span class="rating-count">(${rating.ratingCount} reseñas)</span>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error displaying user rating:', error);
+    }
+}
+
+// Enhanced walk functions with rating system
+async function completeWalkWithRating(walkId) {
+    try {
+        const walkDoc = await getDoc(doc(db, 'walks', walkId));
+        const walkData = walkDoc.data();
+        
+        if (!walkData) {
+            showNotification('Paseo no encontrado', 'error');
+            return;
+        }
+        
+        // Update walk status
+        await updateDoc(doc(db, 'walks', walkId), {
+            status: 'completed',
+            endTime: new Date(),
+            canRate: true
+        });
+        
+        showNotification('Paseo completado. Ambos pueden calificarse.', 'success');
+        
+        // Show rating options
+        const shouldRate = confirm('¿Quieres calificar al ' + (currentUser.uid === walkData.ownerId ? 'paseador' : 'dueño') + '?');
+        if (shouldRate) {
+            const userIdToRate = currentUser.uid === walkData.ownerId ? walkData.walkerId : walkData.ownerId;
+            const userNameToRate = currentUser.uid === walkData.ownerId ? walkData.walkerName : walkData.ownerName;
+            await rateUser(userIdToRate, userNameToRate, walkId);
+        }
+        
+        loadActiveWalks();
+        loadAcceptedWalks();
+    } catch (error) {
+        console.error('Error completing walk with rating:', error);
+        showNotification('Error al completar paseo', 'error');
+    }
+}
+
+// Enhanced rating function with better UI
+async function rateUserEnhanced(userId, userName, walkId) {
+    try {
+        // Create a simple rating modal
+        const rating = prompt(`Califica a ${userName} de 1 a 5 estrellas:`);
+        const ratingNum = parseInt(rating);
+        
+        if (isNaN(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+            showNotification('Por favor ingresa un número del 1 al 5', 'error');
+            return;
+        }
+        
+        const comment = prompt('Comentario (opcional):') || '';
+        
+        // Check if already rated
+        const existingRatingQuery = query(
+            collection(db, 'ratings'),
+            where('raterId', '==', currentUser.uid),
+            where('ratedUserId', '==', userId),
+            where('walkId', '==', walkId)
+        );
+        const existingRatingSnapshot = await getDocs(existingRatingQuery);
+        
+        if (!existingRatingSnapshot.empty) {
+            showNotification('Ya has calificado a este usuario por este paseo', 'error');
+            return;
+        }
+        
+        // Create rating document
+        await addDoc(collection(db, 'ratings'), {
+            raterId: currentUser.uid,
+            raterName: currentUser.displayName || currentUser.email,
+            ratedUserId: userId,
+            ratedUserName: userName,
+            walkId: walkId,
+            rating: ratingNum,
+            comment: comment,
+            createdAt: new Date()
+        });
+        
+        // Update user's average rating
+        await updateUserAverageRating(userId);
+        
+        showNotification('Calificación enviada exitosamente', 'success');
+        loadUserRatings();
+    } catch (error) {
+        console.error('Error rating user:', error);
+        showNotification('Error al enviar calificación', 'error');
+    }
 }
 
 // Add CSS for notifications
