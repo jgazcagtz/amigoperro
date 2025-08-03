@@ -32,6 +32,7 @@
             <div class="nav-menu" id="nav-menu">
                 <a href="#" class="nav-link" onclick="showSection('home')">Inicio</a>
                 <a href="#" class="nav-link" onclick="showSection('services')">Servicios</a>
+                <a href="#" class="nav-link" onclick="showSection('pricing')">Precios</a>
                 <a href="#" class="nav-link" onclick="showSection('about')">Nosotros</a>
                 <a href="#" class="nav-link" onclick="showSection('contact')">Contacto</a>
                 <button class="nav-btn" onclick="showSection('login')">Iniciar Sesión</button>
@@ -219,6 +220,245 @@
                         <div class="image-overlay">
                             <p>"Cada paseo es una aventura de amor"</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>🐾 Nuestros Servicios Profesionales</h2>
+                    <p class="section-subtitle">Paseos, entrenamiento y cursos con amor y experiencia</p>
+                </div>
+                
+                <div class="pricing-intro">
+                    <div class="pricing-images">
+                        <img src="https://i.imgur.com/TgYjMJX.jpeg" alt="Amigo Perro Profesional" class="pricing-image">
+                        <img src="https://i.imgur.com/po7KUte.jpeg" alt="Amigo Perro Servicios" class="pricing-image">
+                    </div>
+                    <div class="pricing-description">
+                        <h3>Somos profesionales, amantes de perros</h3>
+                        <p>Expertos en darles atención y cariño, como si fueran parte de nuestra familia. Nos dedicamos a cuidar, pasear y entrenar a tus amigos perrunos cuando tú no puedes. También impartimos cursos a los dueños, para adiestrar a su amigo perro.</p>
+                        <p>Todos los paseos tienen el objetivo de entrenar y apoyar a tu amigo para que aprenda a convivir plenamente con su entorno.</p>
+                        <div class="pricing-features">
+                            <div class="feature-item">
+                                <i class="fas fa-users"></i>
+                                <span>Máximo 3 perros por entrenador</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-star"></i>
+                                <span>VIP: Cuidado especial y entrenamiento individual</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-clock"></i>
+                                <span>Horarios: 8am - 8pm</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Pago en efectivo o transferencia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-categories">
+                    <div class="pricing-category">
+                        <h3><i class="fas fa-walking"></i> Paseos y Entrenamiento</h3>
+                        <div class="pricing-grid">
+                            <div class="pricing-card" data-service="30min-walk" data-price="60">
+                                <div class="pricing-header">
+                                    <h4>Paseo Básico</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">60</span>
+                                        <span class="duration">/ 30 min</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> Entrenamiento básico</li>
+                                        <li><i class="fas fa-check"></i> Socialización</li>
+                                        <li><i class="fas fa-check"></i> Ejercicio controlado</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Básico - 30 min', 60)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+
+                            <div class="pricing-card featured" data-service="1hr-walk" data-price="90">
+                                <div class="pricing-badge">Más Popular</div>
+                                <div class="pricing-header">
+                                    <h4>Paseo Estándar</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">90</span>
+                                        <span class="duration">/ 1 hr</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> Entrenamiento completo</li>
+                                        <li><i class="fas fa-check"></i> Socialización avanzada</li>
+                                        <li><i class="fas fa-check"></i> Ejercicio intensivo</li>
+                                        <li><i class="fas fa-check"></i> Reporte detallado</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Estándar - 1 hr', 90)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+
+                            <div class="pricing-card" data-service="2hr-walk" data-price="150">
+                                <div class="pricing-header">
+                                    <h4>Paseo Extendido</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">150</span>
+                                        <span class="duration">/ 2 hrs</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> Entrenamiento intensivo</li>
+                                        <li><i class="fas fa-check"></i> Socialización completa</li>
+                                        <li><i class="fas fa-check"></i> Ejercicio exhaustivo</li>
+                                        <li><i class="fas fa-check"></i> Reporte completo</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Extendido - 2 hrs', 150)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+
+                            <div class="pricing-card" data-service="3walks" data-price="250">
+                                <div class="pricing-header">
+                                    <h4>Paquete 3 Paseos</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">250</span>
+                                        <span class="duration">/ 3 paseos</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> 3 paseos de 1 hora</li>
+                                        <li><i class="fas fa-check"></i> Entrenamiento progresivo</li>
+                                        <li><i class="fas fa-check"></i> Ahorro de $20</li>
+                                        <li><i class="fas fa-check"></i> Seguimiento continuo</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Paquete 3 Paseos - 1 hr cada uno', 250)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+
+                            <div class="pricing-card" data-service="7walks" data-price="450">
+                                <div class="pricing-header">
+                                    <h4>Paquete Semanal</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">450</span>
+                                        <span class="duration">/ 7 paseos</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> 7 paseos de 1 hora</li>
+                                        <li><i class="fas fa-check"></i> Entrenamiento intensivo</li>
+                                        <li><i class="fas fa-check"></i> Ahorro de $180</li>
+                                        <li><i class="fas fa-check"></i> Plan personalizado</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Paquete Semanal - 7 paseos de 1 hr', 450)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+
+                            <div class="pricing-card vip" data-service="vip-walk" data-price="150">
+                                <div class="pricing-badge vip-badge">VIP</div>
+                                <div class="pricing-header">
+                                    <h4>Paseo VIP</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">150</span>
+                                        <span class="duration">/ 1 hr</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> Cuidado especial individual</li>
+                                        <li><i class="fas fa-check"></i> Entrenamiento personalizado</li>
+                                        <li><i class="fas fa-check"></i> Atención exclusiva</li>
+                                        <li><i class="fas fa-check"></i> Reporte detallado</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo VIP - 1 hr', 150)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pricing-category">
+                        <h3><i class="fas fa-graduation-cap"></i> Cursos de Adiestramiento</h3>
+                        <div class="pricing-grid">
+                            <div class="pricing-card" data-service="30min-course" data-price="100">
+                                <div class="pricing-header">
+                                    <h4>Curso Básico</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">100</span>
+                                        <span class="duration">/ 30 min</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> Comandos básicos</li>
+                                        <li><i class="fas fa-check"></i> Técnicas de adiestramiento</li>
+                                        <li><i class="fas fa-check"></i> Guía para dueños</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Curso Básico - 30 min', 100)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+
+                            <div class="pricing-card featured" data-service="1hr-course" data-price="150">
+                                <div class="pricing-badge">Recomendado</div>
+                                <div class="pricing-header">
+                                    <h4>Curso Completo</h4>
+                                    <div class="price">
+                                        <span class="currency">$</span>
+                                        <span class="amount">150</span>
+                                        <span class="duration">/ 1 hr</span>
+                                    </div>
+                                </div>
+                                <div class="pricing-features">
+                                    <ul>
+                                        <li><i class="fas fa-check"></i> Comandos avanzados</li>
+                                        <li><i class="fas fa-check"></i> Corrección de comportamientos</li>
+                                        <li><i class="fas fa-check"></i> Técnicas especializadas</li>
+                                        <li><i class="fas fa-check"></i> Seguimiento post-curso</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary select-service" onclick="selectService('Curso Completo - 1 hr', 150)">
+                                    <i class="fab fa-whatsapp"></i> Contratar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pricing-cta">
+                    <div class="cta-content">
+                        <h3>¿Necesitas un servicio personalizado?</h3>
+                        <p>Contáctanos para crear un plan específico para tu amigo perro</p>
+                        <button class="btn btn-accent" onclick="openWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> Consultar Personalizado
+                        </button>
                     </div>
                 </div>
             </div>

@@ -1231,3 +1231,24 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Service Selection and WhatsApp Integration
+function selectService(serviceName, price) {
+    const message = `¡Hola! Me interesa contratar el servicio: ${serviceName} por $${price} MXN. ¿Podrían proporcionarme más información y agendar una cita? 🐾`;
+    openWhatsAppWithMessage(message);
+}
+
+function openWhatsAppWithMessage(message) {
+    const phoneNumber = '525527204437';
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// Global WhatsApp function (already exists, but making sure it's available)
+function openWhatsApp() {
+    const phoneNumber = '525527204437';
+    const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre los servicios de Amigo Perro 🐾');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+}
