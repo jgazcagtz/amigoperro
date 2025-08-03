@@ -1233,20 +1233,20 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Service Selection and WhatsApp Integration
-function selectService(serviceName, price) {
+window.selectService = function(serviceName, price) {
     const message = `¡Hola! Me interesa contratar el servicio: ${serviceName} por $${price} MXN. ¿Podrían proporcionarme más información y agendar una cita? 🐾`;
-    openWhatsAppWithMessage(message);
+    window.openWhatsAppWithMessage(message);
 }
 
-function openWhatsAppWithMessage(message) {
+window.openWhatsAppWithMessage = function(message) {
     const phoneNumber = '525527204437';
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
 }
 
-// Global WhatsApp function (already exists, but making sure it's available)
-function openWhatsApp() {
+// Global WhatsApp function
+window.openWhatsApp = function() {
     const phoneNumber = '525527204437';
     const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre los servicios de Amigo Perro 🐾');
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
