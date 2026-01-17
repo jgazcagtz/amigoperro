@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
@@ -7,8 +7,79 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="format-detection" content="telephone=yes">
-    <title>Amigo Perro 🐾 - Conectando Paseadores y Dueños</title>
-    <meta name="description" content="Servicios profesionales de paseo, entrenamiento y cursos para tu amigo perro en CDMX. Paseadores verificados y expertos en adiestramiento canino.">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <title>Amigo Perro 🐾 - Servicios Veterinarios, Paseos y Entrenamiento Canino en CDMX | Condesa, Roma, Narvarte</title>
+    <meta name="description" content="Servicios profesionales para perros en CDMX: Veterinario, paseos, entrenamiento y accesorios. Atendemos Condesa, Roma, Del Valle, Narvarte y Juárez. Paseadores verificados ⭐ WhatsApp 55-2720-4437">
+    <meta name="keywords" content="veterinario cdmx, paseador perros cdmx, entrenamiento canino, paseos perros condesa, paseos perros roma, accesorios perros, veterinario condesa, veterinario roma, servicio veterinario, cuidado perros cdmx">
+    <meta name="author" content="Amigo Perro">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="geo.region" content="MX-CMX">
+    <meta name="geo.placename" content="Ciudad de México">
+    <meta name="geo.position" content="19.4326;-99.1332">
+    <link rel="canonical" href="https://amigoperro.com">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://amigoperro.com">
+    <meta property="og:title" content="Amigo Perro 🐾 - Servicios Veterinarios y Paseos en CDMX">
+    <meta property="og:description" content="Servicios profesionales para perros: Veterinario, paseos, entrenamiento y accesorios en Condesa, Roma, Del Valle, Narvarte y Juárez. WhatsApp 55-2720-4437">
+    <meta property="og:image" content="https://i.imgur.com/6cnRyuX.png">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:site_name" content="Amigo Perro">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://amigoperro.com">
+    <meta name="twitter:title" content="Amigo Perro 🐾 - Servicios Veterinarios y Paseos en CDMX">
+    <meta name="twitter:description" content="Servicios profesionales para perros: Veterinario, paseos, entrenamiento y accesorios en CDMX">
+    <meta name="twitter:image" content="https://i.imgur.com/6cnRyuX.png">
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Amigo Perro",
+      "image": "https://i.imgur.com/6cnRyuX.png",
+      "@id": "https://amigoperro.com",
+      "url": "https://amigoperro.com",
+      "telephone": "+52-55-2720-4437",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Colonia Condesa",
+        "addressLocality": "Ciudad de México",
+        "addressRegion": "CDMX",
+        "postalCode": "06100",
+        "addressCountry": "MX"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 19.4119,
+        "longitude": -99.1692
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "08:00",
+        "closes": "20:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/amigo.perro.cdmx/",
+        "https://wa.me/525527204437"
+      ],
+      "areaServed": [
+        {"@type": "City", "name": "Condesa, CDMX"},
+        {"@type": "City", "name": "Roma, CDMX"},
+        {"@type": "City", "name": "Del Valle, CDMX"},
+        {"@type": "City", "name": "Narvarte, CDMX"},
+        {"@type": "City", "name": "Juárez, CDMX"}
+      ],
+      "description": "Servicios profesionales para perros: Veterinario, paseos, entrenamiento, cursos de adiestramiento y accesorios en las mejores colonias de CDMX."
+    }
+    </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -37,6 +108,8 @@
             <div class="nav-menu" id="nav-menu">
                 <a href="#" class="nav-link" onclick="showSection('home')">Inicio</a>
                 <a href="#" class="nav-link" onclick="showSection('services')">Servicios</a>
+                <a href="#" class="nav-link" onclick="showSection('veterinary')">Veterinario</a>
+                <a href="#" class="nav-link" onclick="showSection('marketplace')">Accesorios</a>
                 <a href="#" class="nav-link" onclick="showSection('pricing')">Precios</a>
                 <a href="#" class="nav-link" onclick="showSection('about')">Nosotros</a>
                 <a href="#" class="nav-link" onclick="showSection('contact')">Contacto</a>
@@ -56,8 +129,8 @@
         <section id="home" class="section active">
             <div class="hero">
                 <div class="hero-content">
-                    <h1>Conectando Paseadores y Dueños de Perros 🐾</h1>
-                    <p>Encuentra el paseador perfecto para tu mejor amigo o únete como paseador profesional</p>
+                    <h1>Servicios Veterinarios y Profesionales para tu Perro en CDMX 🐾</h1>
+                    <p>Veterinario, paseos, entrenamiento y accesorios en Condesa, Roma, Del Valle, Narvarte y Juárez. Cuidado profesional para tu mejor amigo</p>
                     <div class="hero-buttons">
                         <button class="btn btn-primary" onclick="showSection('register')">
                             <i class="fas fa-user-plus"></i> Registrarse
@@ -75,16 +148,20 @@
             <!-- CTA Section for Services Promotion -->
             <div class="hero-cta">
                 <div class="cta-content">
-                    <h2>🐾 Servicios Profesionales para tu Amigo Perro</h2>
-                    <p>Paseos, entrenamiento y cursos con amor y experiencia profesional</p>
+                    <h2>🐾 Servicios Profesionales en las Mejores Colonias de CDMX</h2>
+                    <p>Atendemos Condesa, Roma, Del Valle, Narvarte y Juárez con amor y experiencia profesional</p>
                     <div class="cta-features">
+                        <div class="cta-feature">
+                            <i class="fas fa-stethoscope"></i>
+                            <span>Servicio Veterinario</span>
+                        </div>
                         <div class="cta-feature">
                             <i class="fas fa-walking"></i>
                             <span>Paseos y Entrenamiento</span>
                         </div>
                         <div class="cta-feature">
-                            <i class="fas fa-star"></i>
-                            <span>Servicio VIP</span>
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Accesorios Premium</span>
                         </div>
                         <div class="cta-feature">
                             <i class="fas fa-graduation-cap"></i>
@@ -103,12 +180,156 @@
             </div>
         </section>
 
+        <!-- Veterinary Services Section -->
+        <section id="veterinary" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>🏥 Servicio Veterinario a Domicilio en CDMX</h2>
+                    <p class="section-subtitle">Atención veterinaria profesional en Condesa, Roma, Del Valle, Narvarte y Juárez</p>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3>Consulta Veterinaria a Domicilio</h3>
+                        <p>Atención veterinaria profesional en la comodidad de tu hogar. Examen completo, diagnóstico y tratamiento.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Examen físico completo</li>
+                            <li><i class="fas fa-check"></i> Diagnóstico profesional</li>
+                            <li><i class="fas fa-check"></i> Recetas y tratamientos</li>
+                            <li><i class="fas fa-check"></i> Sin estrés para tu mascota</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="contactVeterinary('Consulta a Domicilio')">
+                            <i class="fab fa-whatsapp"></i> Agendar Consulta
+                        </button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-syringe"></i>
+                        </div>
+                        <h3>Vacunación</h3>
+                        <p>Programa completo de vacunación para proteger a tu perro de enfermedades. Vacunas certificadas y registro oficial.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Vacuna múltiple (Séxtuple)</li>
+                            <li><i class="fas fa-check"></i> Vacuna antirrábica</li>
+                            <li><i class="fas fa-check"></i> Vacuna contra Bordetella</li>
+                            <li><i class="fas fa-check"></i> Cartilla oficial</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="contactVeterinary('Vacunación')">
+                            <i class="fab fa-whatsapp"></i> Agendar Vacunación
+                        </button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3>Desparasitación</h3>
+                        <p>Tratamiento completo contra parásitos internos y externos. Protege la salud de tu perro y tu familia.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Desparasitación interna</li>
+                            <li><i class="fas fa-check"></i> Control de pulgas y garrapatas</li>
+                            <li><i class="fas fa-check"></i> Productos de calidad</li>
+                            <li><i class="fas fa-check"></i> Asesoría preventiva</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="contactVeterinary('Desparasitación')">
+                            <i class="fab fa-whatsapp"></i> Solicitar Servicio
+                        </button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3>Estética Canina</h3>
+                        <p>Baño, corte de pelo y uñas, limpieza de oídos. Tu perro lucirá hermoso y saludable.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Baño con productos premium</li>
+                            <li><i class="fas fa-check"></i> Corte de pelo profesional</li>
+                            <li><i class="fas fa-check"></i> Corte de uñas</li>
+                            <li><i class="fas fa-check"></i> Limpieza de oídos</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="contactVeterinary('Estética Canina')">
+                            <i class="fab fa-whatsapp"></i> Agendar Estética
+                        </button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Emergencias Veterinarias</h3>
+                        <p>Atención de urgencias las 24 horas. Respuesta rápida para la salud de tu mejor amigo.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Disponible 24/7</li>
+                            <li><i class="fas fa-check"></i> Respuesta rápida</li>
+                            <li><i class="fas fa-check"></i> Traslado incluido</li>
+                            <li><i class="fas fa-check"></i> Equipo especializado</li>
+                        </ul>
+                        <button class="btn btn-accent" onclick="contactVeterinary('Emergencia Veterinaria')">
+                            <i class="fab fa-whatsapp"></i> Emergencia Ahora
+                        </button>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-file-medical"></i>
+                        </div>
+                        <h3>Consultas de Seguimiento</h3>
+                        <p>Control y seguimiento de tratamientos. Aseguramos la recuperación completa de tu mascota.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check"></i> Revisión de tratamiento</li>
+                            <li><i class="fas fa-check"></i> Ajuste de medicación</li>
+                            <li><i class="fas fa-check"></i> Historial clínico</li>
+                            <li><i class="fas fa-check"></i> Consulta telefónica gratis</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="contactVeterinary('Consulta de Seguimiento')">
+                            <i class="fab fa-whatsapp"></i> Agendar Seguimiento
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="coverage-section">
+                    <h3>📍 Cobertura en las Mejores Colonias de CDMX</h3>
+                    <div class="neighborhoods-grid">
+                        <div class="neighborhood-card">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h4>Condesa</h4>
+                            <p>Servicio completo en toda la colonia</p>
+                        </div>
+                        <div class="neighborhood-card">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h4>Roma Norte / Sur</h4>
+                            <p>Cobertura total Roma Norte y Sur</p>
+                        </div>
+                        <div class="neighborhood-card">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h4>Del Valle</h4>
+                            <p>Del Valle Norte, Centro y Sur</p>
+                        </div>
+                        <div class="neighborhood-card">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h4>Narvarte</h4>
+                            <p>Narvarte Poniente y Oriente</p>
+                        </div>
+                        <div class="neighborhood-card">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h4>Juárez</h4>
+                            <p>Zona Rosa y alrededores</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Services Section -->
         <section id="services" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>🐾 Nuestros Servicios Profesionales</h2>
-                    <p class="section-subtitle">Paseos, entrenamiento y cursos con amor y experiencia profesional</p>
+                    <h2>🐾 Paseos y Entrenamiento Profesional</h2>
+                    <p class="section-subtitle">Servicio de paseos con entrenamiento en las mejores colonias de CDMX</p>
                 </div>
                 <div class="services-grid">
                     <div class="service-card">
@@ -495,6 +716,160 @@
             </div>
         </section>
 
+        <!-- Marketplace Section -->
+        <section id="marketplace" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>🛍️ Tienda de Accesorios Premium para Perros</h2>
+                    <p class="section-subtitle">Los mejores productos para tu amigo perro en CDMX - ¡Próximamente!</p>
+                </div>
+                
+                <div class="coming-soon-banner">
+                    <div class="banner-content">
+                        <i class="fas fa-rocket"></i>
+                        <h3>🚀 ¡Próximamente!</h3>
+                        <p>Estamos preparando nuestra tienda con los mejores accesorios, alimentos premium y productos de cuidado para tu perro. Precios competitivos y entrega en Condesa, Roma, Del Valle, Narvarte y Juárez.</p>
+                        <button class="btn btn-accent" onclick="contactMarketplace()">
+                            <i class="fab fa-whatsapp"></i> Notificarme cuando abra
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="marketplace-preview">
+                    <h3>Vista Previa de Productos</h3>
+                    <div class="products-grid">
+                        <div class="product-card">
+                            <div class="product-badge">Próximamente</div>
+                            <div class="product-image">
+                                <i class="fas fa-bone"></i>
+                            </div>
+                            <h4>Alimento Premium</h4>
+                            <p>Marcas premium de alta calidad nutricional para todas las razas y edades</p>
+                            <div class="product-price">
+                                <span class="price-from">Desde</span>
+                                <span class="price-amount">$450</span>
+                                <span class="price-unit">MXN/kg</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="contactMarketplace('Alimento Premium')">
+                                <i class="fab fa-whatsapp"></i> Consultar
+                            </button>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-badge">Próximamente</div>
+                            <div class="product-image">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <h4>Ropa y Accesorios</h4>
+                            <p>Collares, correas, arneses, ropa y accesorios de moda para tu perro</p>
+                            <div class="product-price">
+                                <span class="price-from">Desde</span>
+                                <span class="price-amount">$150</span>
+                                <span class="price-unit">MXN</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="contactMarketplace('Ropa y Accesorios')">
+                                <i class="fab fa-whatsapp"></i> Consultar
+                            </button>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-badge">Próximamente</div>
+                            <div class="product-image">
+                                <i class="fas fa-couch"></i>
+                            </div>
+                            <h4>Camas y Casas</h4>
+                            <p>Camas ortopédicas, casas, cobijas y productos de descanso premium</p>
+                            <div class="product-price">
+                                <span class="price-from">Desde</span>
+                                <span class="price-amount">$800</span>
+                                <span class="price-unit">MXN</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="contactMarketplace('Camas y Casas')">
+                                <i class="fab fa-whatsapp"></i> Consultar
+                            </button>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-badge">Próximamente</div>
+                            <div class="product-image">
+                                <i class="fas fa-futbol"></i>
+                            </div>
+                            <h4>Juguetes</h4>
+                            <p>Juguetes interactivos, pelotas, mordedores y accesorios de entretenimiento</p>
+                            <div class="product-price">
+                                <span class="price-from">Desde</span>
+                                <span class="price-amount">$120</span>
+                                <span class="price-unit">MXN</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="contactMarketplace('Juguetes')">
+                                <i class="fab fa-whatsapp"></i> Consultar
+                            </button>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-badge">Próximamente</div>
+                            <div class="product-image">
+                                <i class="fas fa-shower"></i>
+                            </div>
+                            <h4>Productos de Higiene</h4>
+                            <p>Shampoos, acondicionadores, cepillos y productos de cuidado personal</p>
+                            <div class="product-price">
+                                <span class="price-from">Desde</span>
+                                <span class="price-amount">$180</span>
+                                <span class="price-unit">MXN</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="contactMarketplace('Productos de Higiene')">
+                                <i class="fab fa-whatsapp"></i> Consultar
+                            </button>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-badge">Próximamente</div>
+                            <div class="product-image">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4>Productos Veterinarios</h4>
+                            <p>Suplementos, vitaminas, productos preventivos y de cuidado médico</p>
+                            <div class="product-price">
+                                <span class="price-from">Desde</span>
+                                <span class="price-amount">$250</span>
+                                <span class="price-unit">MXN</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="contactMarketplace('Productos Veterinarios')">
+                                <i class="fab fa-whatsapp"></i> Consultar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="marketplace-features">
+                    <h3>¿Por qué comprar en Amigo Perro?</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-truck"></i>
+                            <h4>Entrega Rápida</h4>
+                            <p>Entrega el mismo día en Condesa, Roma, Del Valle, Narvarte y Juárez</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h4>Precios Competitivos</h4>
+                            <p>Los mejores precios del mercado sin comprometer calidad</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-star"></i>
+                            <h4>Productos Premium</h4>
+                            <p>Solo las mejores marcas y productos verificados</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-headset"></i>
+                            <h4>Asesoría Experta</h4>
+                            <p>Te ayudamos a elegir lo mejor para tu perro</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Register Section -->
         <section id="register" class="section">
             <div class="container">
@@ -742,6 +1117,21 @@
             <div class="container">
                 <h2>Iniciar Sesión</h2>
                 <div class="login-form">
+                    <!-- Google Sign-In Button -->
+                    <button class="google-signin-btn" onclick="signInWithGoogle()">
+                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4"/>
+                            <path d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" fill="#34A853"/>
+                            <path d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z" fill="#FBBC05"/>
+                            <path d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z" fill="#EA4335"/>
+                        </svg>
+                        Continuar con Google
+                    </button>
+                    
+                    <div class="divider">
+                        <span>o continuar con email</span>
+                    </div>
+                    
                     <form id="login-form">
                         <div class="form-group">
                             <label>Email</label>
@@ -921,9 +1311,11 @@
                                     <select id="contact-subject" required>
                                         <option value="">Selecciona un tema</option>
                                         <option value="consulta">Consulta General</option>
+                                        <option value="veterinario">Servicio Veterinario</option>
                                         <option value="paseos">Paseos y Entrenamiento</option>
                                         <option value="cursos">Cursos de Adiestramiento</option>
-                                        <option value="emergencia">Paseo de Emergencia</option>
+                                        <option value="accesorios">Accesorios y Productos</option>
+                                        <option value="emergencia">Emergencia Veterinaria</option>
                                         <option value="precios">Consulta de Precios</option>
                                         <option value="otro">Otro</option>
                                     </select>
@@ -1032,7 +1424,9 @@
                 </div>
                 <div class="footer-section">
                     <h4>Enlaces</h4>
-                    <a href="#" onclick="showSection('services')">Servicios</a>
+                    <a href="#" onclick="showSection('services')">Paseos</a>
+                    <a href="#" onclick="showSection('veterinary')">Veterinario</a>
+                    <a href="#" onclick="showSection('marketplace')">Accesorios</a>
                     <a href="#" onclick="showSection('pricing')">Precios</a>
                     <a href="#" onclick="showSection('about')">Nosotros</a>
                     <a href="#" onclick="showSection('contact')">Contacto</a>

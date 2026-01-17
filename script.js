@@ -1,7 +1,7 @@
 // Firebase Configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, getDocs, collection, addDoc, updateDoc, query, where, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -19,6 +19,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
 // Global Variables
 let currentUser = null;
@@ -1774,6 +1775,69 @@ window.openWhatsApp = function() {
     window.open(whatsappUrl, '_blank');
 }
 
+// Google Sign-In Function
+window.signInWithGoogle = async function() {
+    try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+        
+        // Check if user exists in Firestore
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        
+        if (!userDoc.exists()) {
+            // Create new user profile with Google data
+            await setDoc(doc(db, 'users', user.uid), {
+                name: user.displayName,
+                email: user.email,
+                phone: '',
+                userType: 'owner', // Default to owner, can be changed later
+                photoURL: user.photoURL,
+                createdAt: new Date(),
+                provider: 'google',
+                averageRating: 5.0,
+                totalRatings: 0,
+                ratingCount: 0
+            });
+            showNotification(`Bienvenido ${user.displayName}! Tu cuenta ha sido creada`, 'success');
+        } else {
+            showNotification(`Bienvenido de nuevo ${user.displayName}`, 'success');
+        }
+        
+        currentUser = user;
+        userType = userDoc.exists() ? userDoc.data().userType : 'owner';
+        showSection('dashboard');
+        loadUserData();
+        
+    } catch (error) {
+        console.error('Error signing in with Google:', error);
+        showNotification('Error al iniciar sesión con Google: ' + error.message, 'error');
+    }
+}
+
+// Veterinary Services Contact Function
+window.contactVeterinary = function(serviceName) {
+    let message = `¡Hola! Me interesa el servicio veterinario: *${serviceName}*\n\n¿Podrían darme más información sobre el servicio y los precios? Me gustaría agendar una cita. 🐾`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const phoneNumber = '525527204437';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// Marketplace Contact Function
+window.contactMarketplace = function(productName = '') {
+    let message = `¡Hola! Me interesa la tienda de accesorios para perros 🛍️`;
+    if (productName) {
+        message += `\n\nEstoy interesado en: *${productName}*`;
+    }
+    message += `\n\nPor favor notifíquenme cuando la tienda esté disponible. ¡Gracias! 🐾`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const phoneNumber = '525527204437';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+}
+
 // Contact form functionality
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');
@@ -1788,9 +1852,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Create WhatsApp message
             const subjectText = {
                 'consulta': 'Consulta General',
+                'veterinario': 'Servicio Veterinario',
                 'paseos': 'Paseos y Entrenamiento',
                 'cursos': 'Cursos de Adiestramiento',
-                'emergencia': 'Paseo de Emergencia',
+                'accesorios': 'Accesorios y Productos',
+                'emergencia': 'Emergencia Veterinaria',
                 'precios': 'Consulta de Precios',
                 'otro': 'Otro'
             }[subject] || 'Consulta';
