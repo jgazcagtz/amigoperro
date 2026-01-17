@@ -462,6 +462,9 @@ async function loadOwnerDashboard() {
     const dashboardContent = document.getElementById('owner-dashboard');
     dashboardContent.classList.add('active');
     
+    // Update user info in header
+    await updateDashboardHeader('owner');
+    
     // Load owner's dogs
     await loadDogsList();
     
@@ -477,11 +480,17 @@ async function loadOwnerDashboard() {
     // Load user ratings and update rating display
     await loadUserRatings();
     await updateDashboardRatingDisplay('owner');
+    
+    // Update statistics
+    await updateOwnerStatistics();
 }
 
 async function loadWalkerDashboard() {
     const dashboardContent = document.getElementById('walker-dashboard');
     dashboardContent.classList.add('active');
+    
+    // Update user info in header
+    await updateDashboardHeader('walker');
     
     // Load available walks
     await loadAvailableWalks();
@@ -498,6 +507,165 @@ async function loadWalkerDashboard() {
     // Load walker ratings and update rating display
     await loadWalkerRatings();
     await updateDashboardRatingDisplay('walker');
+    
+    // Update statistics
+    await updateWalkerStatistics();
+}
+
+// Update Dashboard Header with User Info
+async function updateDashboardHeader(type) {
+    try {
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            
+            // Update user name
+            const userNameEl = document.getElementById('user-name');
+            if (userNameEl) {
+                userNameEl.textContent = `¡Hola ${userData.name}!`;
+            }
+            
+            // Update user type label
+            const userTypeLabel = document.getElementById('user-type-label');
+            if (userTypeLabel) {
+                userTypeLabel.textContent = type === 'owner' ? 'Dueño de Perro' : 'Paseador Profesional';
+            }
+            
+            // Update user avatar
+            const userAvatar = document.getElementById('user-avatar');
+            if (userAvatar && userData.photoURL) {
+                userAvatar.innerHTML = `<img src="${userData.photoURL}" alt="Avatar">`;
+            }
+        }
+    } catch (error) {
+        console.error('Error updating dashboard header:', error);
+    }
+}
+
+// Update Owner Statistics
+async function updateOwnerStatistics() {
+    try {
+        // Count dogs
+        const dogsQuery = query(collection(db, 'dogs'), where('ownerId', '==', currentUser.uid));
+        const dogsSnapshot = await getDocs(dogsQuery);
+        const totalDogs = dogsSnapshot.size;
+        
+        // Count scheduled walks
+        const scheduledQuery = query(
+            collection(db, 'walks'),
+            where('ownerId', '==', currentUser.uid),
+            where('status', '==', 'pending')
+        );
+        const scheduledSnapshot = await getDocs(scheduledQuery);
+        const totalScheduled = scheduledSnapshot.size;
+        
+        // Count active walks
+        const activeQuery = query(
+            collection(db, 'walks'),
+            where('ownerId', '==', currentUser.uid),
+            where('status', '==', 'active')
+        );
+        const activeSnapshot = await getDocs(activeQuery);
+        const totalActive = activeSnapshot.size;
+        
+        // Count completed walks
+        const completedQuery = query(
+            collection(db, 'walks'),
+            where('ownerId', '==', currentUser.uid),
+            where('status', '==', 'completed')
+        );
+        const completedSnapshot = await getDocs(completedQuery);
+        const totalCompleted = completedSnapshot.size;
+        
+        // Update UI
+        const totalDogsEl = document.getElementById('total-dogs');
+        if (totalDogsEl) totalDogsEl.textContent = totalDogs;
+        
+        const totalScheduledEl = document.getElementById('total-scheduled');
+        if (totalScheduledEl) totalScheduledEl.textContent = totalScheduled;
+        
+        const totalActiveEl = document.getElementById('total-active-owner');
+        if (totalActiveEl) totalActiveEl.textContent = totalActive;
+        
+        const totalCompletedEl = document.getElementById('total-completed-owner');
+        if (totalCompletedEl) totalCompletedEl.textContent = totalCompleted;
+        
+        // Update badges
+        const scheduledBadge = document.getElementById('scheduled-badge');
+        if (scheduledBadge) scheduledBadge.textContent = totalScheduled;
+        
+        const activeBadge = document.getElementById('active-badge');
+        if (activeBadge) activeBadge.textContent = totalActive;
+        
+    } catch (error) {
+        console.error('Error updating owner statistics:', error);
+    }
+}
+
+// Update Walker Statistics
+async function updateWalkerStatistics() {
+    try {
+        // Count available walks
+        const availableQuery = query(
+            collection(db, 'walks'),
+            where('status', '==', 'pending')
+        );
+        const availableSnapshot = await getDocs(availableQuery);
+        const totalAvailable = availableSnapshot.size;
+        
+        // Count accepted walks
+        const acceptedQuery = query(
+            collection(db, 'walks'),
+            where('walkerId', '==', currentUser.uid),
+            where('status', '==', 'accepted')
+        );
+        const acceptedSnapshot = await getDocs(acceptedQuery);
+        const totalAccepted = acceptedSnapshot.size;
+        
+        // Count active walks
+        const activeQuery = query(
+            collection(db, 'walks'),
+            where('walkerId', '==', currentUser.uid),
+            where('status', '==', 'active')
+        );
+        const activeSnapshot = await getDocs(activeQuery);
+        const totalActive = activeSnapshot.size;
+        
+        // Count completed walks
+        const completedQuery = query(
+            collection(db, 'walks'),
+            where('walkerId', '==', currentUser.uid),
+            where('status', '==', 'completed')
+        );
+        const completedSnapshot = await getDocs(completedQuery);
+        const totalCompleted = completedSnapshot.size;
+        
+        // Update UI
+        const totalAvailableEl = document.getElementById('total-available');
+        if (totalAvailableEl) totalAvailableEl.textContent = totalAvailable;
+        
+        const totalAcceptedEl = document.getElementById('total-accepted');
+        if (totalAcceptedEl) totalAcceptedEl.textContent = totalAccepted;
+        
+        const totalActiveEl = document.getElementById('total-active-walker');
+        if (totalActiveEl) totalActiveEl.textContent = totalActive;
+        
+        const totalCompletedEl = document.getElementById('total-completed-walker');
+        if (totalCompletedEl) totalCompletedEl.textContent = totalCompleted;
+        
+        // Update badges
+        const availableBadge = document.getElementById('available-badge');
+        if (availableBadge) availableBadge.textContent = totalAvailable;
+        
+        const acceptedBadge = document.getElementById('accepted-badge');
+        if (acceptedBadge) acceptedBadge.textContent = totalAccepted;
+        
+        const activeWalkerBadge = document.getElementById('active-walker-badge');
+        if (activeWalkerBadge) activeWalkerBadge.textContent = totalActive;
+        
+    } catch (error) {
+        console.error('Error updating walker statistics:', error);
+    }
 }
 
 
@@ -510,21 +678,37 @@ async function loadDogsList() {
         const dogsSnapshot = await getDocs(dogsQuery);
         
         let dogsHTML = '';
-        dogsSnapshot.forEach(doc => {
-            const dog = doc.data();
-            dogsHTML += `
-                <div class="dog-item">
-                    <h4>${dog.name}</h4>
-                    <p><strong>Raza:</strong> ${dog.breed}</p>
-                    <p><strong>Edad:</strong> ${dog.age} años</p>
-                    <button class="btn btn-secondary" onclick="editDog('${doc.id}')">Editar</button>
+        if (dogsSnapshot.empty) {
+            dogsHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-dog" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--text-light); font-size: 1.1rem;">No tienes amigos registrados aún</p>
+                    <button class="btn btn-primary" onclick="showAddDogModal()" style="margin-top: 1rem;">
+                        <i class="fas fa-plus"></i> Agregar Mi Primer Amigo
+                    </button>
                 </div>
             `;
-        });
+        } else {
+            dogsSnapshot.forEach(doc => {
+                const dog = doc.data();
+                dogsHTML += `
+                    <div class="dog-item">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🐕</div>
+                        <h4>${dog.name}</h4>
+                        <p><strong>Raza:</strong> ${dog.breed}</p>
+                        <p><strong>Edad:</strong> ${dog.age} años</p>
+                        <button class="btn btn-secondary btn-sm" onclick="editDog('${doc.id}')" style="margin-top: 0.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </div>
+                `;
+            });
+        }
         
-        dogsList.innerHTML = dogsHTML || '<p>No tienes amigos registrados</p>';
+        dogsList.innerHTML = dogsHTML;
     } catch (error) {
         console.error('Error loading dogs:', error);
+        dogsList.innerHTML = '<p style="color: var(--text-light); text-align: center;">Error al cargar amigos</p>';
     }
 }
 
@@ -650,8 +834,27 @@ async function loadScheduledWalks() {
         );
         const walksSnapshot = await getDocs(walksQuery);
         
+        // Update badge
+        const scheduledBadge = document.getElementById('scheduled-badge');
+        if (scheduledBadge) scheduledBadge.textContent = walksSnapshot.size;
+        
+        // Update stat
+        const totalScheduledEl = document.getElementById('total-scheduled');
+        if (totalScheduledEl) totalScheduledEl.textContent = walksSnapshot.size;
+        
         let walksHTML = '';
-        walksSnapshot.forEach(doc => {
+        if (walksSnapshot.empty) {
+            walksHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-calendar-plus"></i>
+                    <p>No tienes paseos programados</p>
+                    <button class="btn btn-primary btn-sm" onclick="showScheduleWalkModal()">
+                        <i class="fas fa-plus"></i> Programar Paseo
+                    </button>
+                </div>
+            `;
+        } else {
+            walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
                 <div class="walk-card">
@@ -682,11 +885,13 @@ async function loadScheduledWalks() {
                     </div>
                 </div>
             `;
-        });
+            });
+        }
         
-        scheduledWalks.innerHTML = walksHTML || '<p>No hay paseos programados</p>';
+        scheduledWalks.innerHTML = walksHTML;
     } catch (error) {
         console.error('Error loading scheduled walks:', error);
+        scheduledWalks.innerHTML = '<p style="color: var(--text-light); text-align: center;">Error al cargar paseos programados</p>';
     }
 }
 
@@ -753,8 +958,31 @@ async function loadAvailableWalks() {
         );
         const walksSnapshot = await getDocs(walksQuery);
         
+        // Update badge
+        const availableBadge = document.getElementById('available-badge');
+        if (availableBadge) availableBadge.textContent = walksSnapshot.size;
+        
+        // Update stat
+        const totalAvailableEl = document.getElementById('total-available');
+        if (totalAvailableEl) totalAvailableEl.textContent = walksSnapshot.size;
+        
         let walksHTML = '';
         const walks = [];
+        
+        if (walksSnapshot.empty) {
+            walksHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-list"></i>
+                    <p>No hay paseos disponibles en este momento</p>
+                    <button class="btn btn-primary btn-sm" onclick="loadAvailableWalks()" style="margin-top: 1rem;">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </div>
+            `;
+            availableWalks.innerHTML = walksHTML;
+            return;
+        }
+        
         walksSnapshot.forEach(doc => {
             walks.push({ id: doc.id, ...doc.data() });
         });
@@ -871,8 +1099,24 @@ async function loadAcceptedWalks() {
         );
         const walksSnapshot = await getDocs(walksQuery);
         
+        // Update badge
+        const acceptedBadge = document.getElementById('accepted-badge');
+        if (acceptedBadge) acceptedBadge.textContent = walksSnapshot.size;
+        
+        // Update stat
+        const totalAcceptedEl = document.getElementById('total-accepted');
+        if (totalAcceptedEl) totalAcceptedEl.textContent = walksSnapshot.size;
+        
         let walksHTML = '';
-        walksSnapshot.forEach(doc => {
+        if (walksSnapshot.empty) {
+            walksHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-check"></i>
+                    <p>No tienes paseos aceptados</p>
+                </div>
+            `;
+        } else {
+            walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
                 <div class="walk-card">
@@ -913,12 +1157,13 @@ async function loadAcceptedWalks() {
                     </div>
                 </div>
             `;
-        });
+            });
+        }
         
-        acceptedWalks.innerHTML = walksHTML || '<p>No hay paseos aceptados</p>';
+        acceptedWalks.innerHTML = walksHTML;
     } catch (error) {
         console.error('Error loading accepted walks:', error);
-        acceptedWalks.innerHTML = '<p>Error al cargar paseos aceptados</p>';
+        acceptedWalks.innerHTML = '<p style="color: var(--text-light); text-align: center;">Error al cargar paseos aceptados</p>';
     }
 }
 
@@ -1206,8 +1451,24 @@ async function loadActiveWalks() {
         );
         const walksSnapshot = await getDocs(walksQuery);
         
+        // Update badge
+        const activeWalkerBadge = document.getElementById('active-walker-badge');
+        if (activeWalkerBadge) activeWalkerBadge.textContent = walksSnapshot.size;
+        
+        // Update stat
+        const totalActiveEl = document.getElementById('total-active-walker');
+        if (totalActiveEl) totalActiveEl.textContent = walksSnapshot.size;
+        
         let walksHTML = '';
-        walksSnapshot.forEach(doc => {
+        if (walksSnapshot.empty) {
+            walksHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-running"></i>
+                    <p>No hay paseos en curso</p>
+                </div>
+            `;
+        } else {
+            walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
                 <div class="walk-card">
@@ -1237,11 +1498,13 @@ async function loadActiveWalks() {
                     </div>
                 </div>
             `;
-        });
+            });
+        }
         
-        activeWalks.innerHTML = walksHTML || '<p>No hay paseos activos</p>';
+        activeWalks.innerHTML = walksHTML;
     } catch (error) {
         console.error('Error loading active walks:', error);
+        activeWalks.innerHTML = '<p style="color: var(--text-light); text-align: center;">Error al cargar paseos activos</p>';
     }
 }
 
@@ -1255,8 +1518,24 @@ async function loadActiveWalksOwner() {
         );
         const walksSnapshot = await getDocs(walksQuery);
         
+        // Update badge
+        const activeBadge = document.getElementById('active-badge');
+        if (activeBadge) activeBadge.textContent = walksSnapshot.size;
+        
+        // Update stat
+        const totalActiveEl = document.getElementById('total-active-owner');
+        if (totalActiveEl) totalActiveEl.textContent = walksSnapshot.size;
+        
         let walksHTML = '';
-        walksSnapshot.forEach(doc => {
+        if (walksSnapshot.empty) {
+            walksHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-running"></i>
+                    <p>No hay paseos activos en este momento</p>
+                </div>
+            `;
+        } else {
+            walksSnapshot.forEach(doc => {
             const walk = doc.data();
             walksHTML += `
                 <div class="walk-card">
@@ -1286,11 +1565,13 @@ async function loadActiveWalksOwner() {
                     </div>
                 </div>
             `;
-        });
+            });
+        }
         
-        activeWalksOwner.innerHTML = walksHTML || '<p>No hay paseos activos</p>';
+        activeWalksOwner.innerHTML = walksHTML;
     } catch (error) {
         console.error('Error loading active walks for owner:', error);
+        activeWalksOwner.innerHTML = '<p style="color: var(--text-light); text-align: center;">Error al cargar paseos activos</p>';
     }
 }
 
@@ -1775,7 +2056,7 @@ window.openWhatsApp = function() {
     window.open(whatsappUrl, '_blank');
 }
 
-// Google Sign-In Function
+// Google Sign-In Function with Profile Type Selection
 window.signInWithGoogle = async function() {
     try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -1785,32 +2066,135 @@ window.signInWithGoogle = async function() {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         
         if (!userDoc.exists()) {
-            // Create new user profile with Google data
-            await setDoc(doc(db, 'users', user.uid), {
-                name: user.displayName,
-                email: user.email,
-                phone: '',
-                userType: 'owner', // Default to owner, can be changed later
-                photoURL: user.photoURL,
-                createdAt: new Date(),
-                provider: 'google',
-                averageRating: 5.0,
-                totalRatings: 0,
-                ratingCount: 0
-            });
-            showNotification(`Bienvenido ${user.displayName}! Tu cuenta ha sido creada`, 'success');
+            // Show profile type selection modal for new users
+            currentUser = user;
+            showProfileTypeModal(user);
         } else {
             showNotification(`Bienvenido de nuevo ${user.displayName}`, 'success');
+            currentUser = user;
+            userType = userDoc.data().userType;
+            showSection('dashboard');
+            loadUserData();
         }
-        
-        currentUser = user;
-        userType = userDoc.exists() ? userDoc.data().userType : 'owner';
-        showSection('dashboard');
-        loadUserData();
         
     } catch (error) {
         console.error('Error signing in with Google:', error);
         showNotification('Error al iniciar sesión con Google: ' + error.message, 'error');
+    }
+}
+
+// Show Profile Type Selection Modal
+function showProfileTypeModal(user) {
+    const modal = document.getElementById('profile-type-modal');
+    if (!modal) return;
+    
+    // Set user info in modal
+    document.getElementById('profile-user-name').textContent = user.displayName;
+    document.getElementById('profile-user-email').textContent = user.email;
+    if (user.photoURL) {
+        document.getElementById('profile-user-photo').src = user.photoURL;
+    }
+    
+    modal.style.display = 'flex';
+}
+
+// Complete Google Profile Setup
+window.completeGoogleProfile = async function(selectedUserType) {
+    try {
+        const modal = document.getElementById('profile-type-modal');
+        const phone = document.getElementById('profile-phone').value;
+        const address = selectedUserType === 'owner' ? document.getElementById('profile-address').value : '';
+        const zones = selectedUserType === 'walker' ? document.getElementById('profile-zones').value : '';
+        const experience = selectedUserType === 'walker' ? document.getElementById('profile-experience').value : '';
+        
+        // Validate required fields
+        if (!phone) {
+            showNotification('Por favor ingresa tu número de teléfono', 'error');
+            return;
+        }
+        
+        if (selectedUserType === 'owner' && !address) {
+            showNotification('Por favor ingresa tu dirección', 'error');
+            return;
+        }
+        
+        if (selectedUserType === 'walker' && (!zones || !experience)) {
+            showNotification('Por favor completa todos los campos requeridos', 'error');
+            return;
+        }
+        
+        // Create user profile
+        const userData = {
+            name: currentUser.displayName,
+            email: currentUser.email,
+            phone: phone,
+            userType: selectedUserType,
+            photoURL: currentUser.photoURL || '',
+            createdAt: new Date(),
+            provider: 'google',
+            averageRating: 5.0,
+            totalRatings: 0,
+            ratingCount: 0
+        };
+        
+        if (selectedUserType === 'owner') {
+            userData.address = address;
+        } else if (selectedUserType === 'walker') {
+            userData.zones = zones;
+            userData.experience = parseInt(experience);
+            userData.isVerified = false;
+        }
+        
+        await setDoc(doc(db, 'users', currentUser.uid), userData);
+        
+        modal.style.display = 'none';
+        userType = selectedUserType;
+        
+        showNotification(`¡Bienvenido ${currentUser.displayName}! Tu perfil ha sido creado exitosamente`, 'success');
+        showSection('dashboard');
+        loadUserData();
+        
+    } catch (error) {
+        console.error('Error completing Google profile:', error);
+        showNotification('Error al completar el perfil: ' + error.message, 'error');
+    }
+}
+
+// Switch profile type selection in modal
+window.switchProfileType = function(type) {
+    const ownerFields = document.getElementById('owner-profile-fields');
+    const walkerFields = document.getElementById('walker-profile-fields');
+    const ownerBtn = document.getElementById('complete-owner-btn');
+    const walkerBtn = document.getElementById('complete-walker-btn');
+    const ownerCard = document.querySelector('.profile-type-card:first-child');
+    const walkerCard = document.querySelector('.profile-type-card:last-child');
+    
+    if (type === 'owner') {
+        ownerFields.style.display = 'block';
+        walkerFields.style.display = 'none';
+        ownerBtn.style.display = 'flex';
+        walkerBtn.style.display = 'none';
+        ownerCard.classList.add('selected');
+        walkerCard.classList.remove('selected');
+        
+        // Make walker fields not required
+        document.getElementById('profile-zones').removeAttribute('required');
+        document.getElementById('profile-experience').removeAttribute('required');
+        // Make owner fields required
+        document.getElementById('profile-address').setAttribute('required', 'required');
+    } else {
+        ownerFields.style.display = 'none';
+        walkerFields.style.display = 'block';
+        ownerBtn.style.display = 'none';
+        walkerBtn.style.display = 'flex';
+        ownerCard.classList.remove('selected');
+        walkerCard.classList.add('selected');
+        
+        // Make owner fields not required
+        document.getElementById('profile-address').removeAttribute('required');
+        // Make walker fields required
+        document.getElementById('profile-zones').setAttribute('required', 'required');
+        document.getElementById('profile-experience').setAttribute('required', 'required');
     }
 }
 
