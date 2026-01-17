@@ -2,8 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#1c7d54">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=yes">
     <title>Amigo Perro 🐾 - Conectando Paseadores y Dueños</title>
+    <meta name="description" content="Servicios profesionales de paseo, entrenamiento y cursos para tu amigo perro en CDMX. Paseadores verificados y expertos en adiestramiento canino.">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -264,11 +269,7 @@
                 </div>
                 
                 <div class="pricing-intro">
-                    <div class="pricing-images">
-                        <img src="https://i.imgur.com/TgYjMJX.jpeg" alt="Amigo Perro Profesional" class="pricing-image">
-                        <img src="https://i.imgur.com/po7KUte.jpeg" alt="Amigo Perro Servicios" class="pricing-image">
-                    </div>
-                    <div class="pricing-description">
+                    <div class="pricing-description pricing-description-full">
                         <h3>Somos profesionales, amantes de perros</h3>
                         <p>Expertos en darles atención y cariño, como si fueran parte de nuestra familia. Nos dedicamos a cuidar, pasear y entrenar a tus amigos perrunos cuando tú no puedes. También impartimos cursos a los dueños, para adiestrar a su amigo perro.</p>
                         <p>Todos los paseos tienen el objetivo de entrenar y apoyar a tu amigo para que aprenda a convivir plenamente con su entorno.</p>
@@ -297,12 +298,12 @@
                     <div class="pricing-category">
                         <h3><i class="fas fa-walking"></i> Paseos y Entrenamiento</h3>
                         <div class="pricing-grid">
-                            <div class="pricing-card" data-service="30min-walk" data-price="60">
+                            <div class="pricing-card" data-service="30min-walk" data-price="66">
                                 <div class="pricing-header">
                                     <h4>Paseo Básico</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">60</span>
+                                        <span class="amount">66</span>
                                         <span class="duration">/ 30 min</span>
                                     </div>
                                 </div>
@@ -313,18 +314,18 @@
                                         <li><i class="fas fa-check"></i> Ejercicio controlado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Básico - 30 min', 60)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Básico - 30 min', 66)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card featured" data-service="1hr-walk" data-price="90">
+                            <div class="pricing-card featured" data-service="1hr-walk" data-price="99">
                                 <div class="pricing-badge">Más Popular</div>
                                 <div class="pricing-header">
                                     <h4>Paseo Estándar</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">90</span>
+                                        <span class="amount">99</span>
                                         <span class="duration">/ 1 hr</span>
                                     </div>
                                 </div>
@@ -336,17 +337,17 @@
                                         <li><i class="fas fa-check"></i> Reporte detallado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Estándar - 1 hr', 90)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Estándar - 1 hr', 99)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card" data-service="2hr-walk" data-price="150">
+                            <div class="pricing-card" data-service="2hr-walk" data-price="165">
                                 <div class="pricing-header">
                                     <h4>Paseo Extendido</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">150</span>
+                                        <span class="amount">165</span>
                                         <span class="duration">/ 2 hrs</span>
                                     </div>
                                 </div>
@@ -358,17 +359,17 @@
                                         <li><i class="fas fa-check"></i> Reporte completo</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Extendido - 2 hrs', 150)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Extendido - 2 hrs', 165)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card" data-service="3walks" data-price="250">
+                            <div class="pricing-card" data-service="3walks" data-price="275">
                                 <div class="pricing-header">
                                     <h4>Paquete 3 Paseos</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">250</span>
+                                        <span class="amount">275</span>
                                         <span class="duration">/ 3 paseos</span>
                                     </div>
                                 </div>
@@ -376,21 +377,21 @@
                                     <ul>
                                         <li><i class="fas fa-check"></i> 3 paseos de 1 hora</li>
                                         <li><i class="fas fa-check"></i> Entrenamiento progresivo</li>
-                                        <li><i class="fas fa-check"></i> Ahorro de $20</li>
+                                        <li><i class="fas fa-check"></i> Ahorro de $22</li>
                                         <li><i class="fas fa-check"></i> Seguimiento continuo</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paquete 3 Paseos - 1 hr cada uno', 250)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paquete 3 Paseos - 1 hr cada uno', 275)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card" data-service="7walks" data-price="450">
+                            <div class="pricing-card" data-service="7walks" data-price="495">
                                 <div class="pricing-header">
                                     <h4>Paquete Semanal</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">450</span>
+                                        <span class="amount">495</span>
                                         <span class="duration">/ 7 paseos</span>
                                     </div>
                                 </div>
@@ -398,22 +399,22 @@
                                     <ul>
                                         <li><i class="fas fa-check"></i> 7 paseos de 1 hora</li>
                                         <li><i class="fas fa-check"></i> Entrenamiento intensivo</li>
-                                        <li><i class="fas fa-check"></i> Ahorro de $180</li>
+                                        <li><i class="fas fa-check"></i> Ahorro de $198</li>
                                         <li><i class="fas fa-check"></i> Plan personalizado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paquete Semanal - 7 paseos de 1 hr', 450)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paquete Semanal - 7 paseos de 1 hr', 495)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card vip" data-service="vip-walk" data-price="150">
+                            <div class="pricing-card vip" data-service="vip-walk" data-price="165">
                                 <div class="pricing-badge vip-badge">VIP</div>
                                 <div class="pricing-header">
                                     <h4>Paseo VIP</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">150</span>
+                                        <span class="amount">165</span>
                                         <span class="duration">/ 1 hr</span>
                                     </div>
                                 </div>
@@ -425,7 +426,7 @@
                                         <li><i class="fas fa-check"></i> Reporte detallado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo VIP - 1 hr', 150)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo VIP - 1 hr', 165)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
@@ -435,12 +436,12 @@
                     <div class="pricing-category">
                         <h3><i class="fas fa-graduation-cap"></i> Cursos de Adiestramiento</h3>
                         <div class="pricing-grid">
-                            <div class="pricing-card" data-service="30min-course" data-price="100">
+                            <div class="pricing-card" data-service="30min-course" data-price="110">
                                 <div class="pricing-header">
                                     <h4>Curso Básico</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">100</span>
+                                        <span class="amount">110</span>
                                         <span class="duration">/ 30 min</span>
                                     </div>
                                 </div>
@@ -451,18 +452,18 @@
                                         <li><i class="fas fa-check"></i> Guía para dueños</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Curso Básico - 30 min', 100)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Curso Básico - 30 min', 110)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card featured" data-service="1hr-course" data-price="150">
+                            <div class="pricing-card featured" data-service="1hr-course" data-price="165">
                                 <div class="pricing-badge">Recomendado</div>
                                 <div class="pricing-header">
                                     <h4>Curso Completo</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">150</span>
+                                        <span class="amount">165</span>
                                         <span class="duration">/ 1 hr</span>
                                     </div>
                                 </div>
@@ -474,7 +475,7 @@
                                         <li><i class="fas fa-check"></i> Seguimiento post-curso</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Curso Completo - 1 hr', 150)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Curso Completo - 1 hr', 165)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
@@ -1064,9 +1065,5 @@
 
     <!-- Firebase SDK -->
     <script type="module" src="script.js"></script>
-    <!-- Zentix Chatbot: AmigoPerroBot -->
-<script>
-!function(){var c={"id":"moo0zwOLxlV7m7rAaxNS","name":"AmigoPerroBot","language":"es","welcomeMessage":"¡Hola!  ¿Cómo puedo ayudarte?","primaryColor":"#4a6bff","position":"bottom-left","apiKey":"zentix_uaamh1a6gtgs8sg853q468","apiUrl":"https://zentixchatbot.vercel.app/api/chatbot-api"};var p={"w":"bottom:30px;left:30px;","c":"bottom:100px;left:30px;"};var d=document;var s=d.createElement('style');s.textContent='.zt-w{position:fixed;'+p.w+';width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,0.2);z-index:9999;color:#fff;font-size:12px;transition:all 0.3s}.zt-w:hover{transform:scale(1.1)}.zt-c{position:fixed;'+p.c+';width:350px;max-width:90%;background:#fff;border-radius:10px;box-shadow:0 5px 30px rgba(0,0,0,0.2);z-index:10000;display:none;overflow:hidden}.zt-h{padding:15px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center}.zt-t{display:flex;align-items:center;gap:10px;font-weight:500}.zt-x{cursor:pointer;font-size:18px;transition:all 0.3s}.zt-x:hover{transform:rotate(90deg)}.zt-m{height:300px;overflow-y:auto;padding:20px;background:#f5f7ff}.zt-msg{margin-bottom:15px;display:flex}.zt-msg.u{justify-content:flex-end}.zt-msg.b{justify-content:flex-start}.zt-msg-c{max-width:80%;padding:10px 15px;border-radius:18px;font-size:14px;line-height:1.4}.zt-msg.u .zt-msg-c{color:#fff;border-bottom-right-radius:5px}.zt-msg.b .zt-msg-c{background:#fff;color:#333;border-bottom-left-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.05)}.zt-i{display:flex;padding:15px;border-top:1px solid #f1f1f1;background:#fff}.zt-i input{flex:1;padding:10px 15px;border:1px solid #f1f1f1;border-radius:30px;outline:none;font-size:14px}.zt-i button{width:40px;height:40px;border-radius:50%;border:none;margin-left:10px;cursor:pointer;color:#fff}@media(max-width:768px){.zt-c{width:90%;'+p.c.replace('30px','5%')+'}.zt-w{width:50px;height:50px;'+p.w.replace('30px','20px')+'}}';d.head.appendChild(s);var w=d.createElement('div');w.id='zt-widget';w.innerHTML='<div class="zt-w" style="background:'+c.primaryColor+'"><i class="fas fa-robot"></i></div><div class="zt-c"><div class="zt-h" style="background:'+c.primaryColor+'"><div class="zt-t"><i class="fas fa-robot"></i><span>'+c.name+'</span></div><div class="zt-x"><i class="fas fa-times"></i></div></div><div class="zt-m"></div><div class="zt-i"><input type="text" placeholder="Type your message..."><button style="background:'+c.primaryColor+'"><i class="fas fa-paper-plane"></i></button></div></div>';d.body.appendChild(w);if(!d.querySelector('link[href*="font-awesome"]')){var l=d.createElement('link');l.rel='stylesheet';l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';d.head.appendChild(l)}var wb=w.querySelector('.zt-w'),ct=w.querySelector('.zt-c'),xb=w.querySelector('.zt-x'),inp=w.querySelector('.zt-i input'),btn=w.querySelector('.zt-i button'),msg=w.querySelector('.zt-m');var sid=localStorage.getItem('zt_session_'+c.id)||null;function gs(){return'session_'+Math.random().toString(36).substring(2,15)+Date.now().toString(36)}if(!sid)sid=gs();localStorage.setItem('zt_session_'+c.id,sid);function am(t,s){var m=d.createElement('div');m.className='zt-msg '+(s==='user'?'u':'b');var mc=d.createElement('div');mc.className='zt-msg-c';if(s==='user')mc.style.background=c.primaryColor;mc.textContent=t;m.appendChild(mc);msg.appendChild(m);msg.scrollTop=msg.scrollHeight}wb.onclick=function(){ct.style.display='block';if(msg.children.length===0)am(c.welcomeMessage,'bot')};xb.onclick=function(){ct.style.display='none'};function sm(){var m=inp.value.trim();if(!m)return;am(m,'user');inp.value='';var ti=d.createElement('div');ti.className='zt-msg b';ti.innerHTML='<div class="zt-msg-c">Typing...</div>';msg.appendChild(ti);msg.scrollTop=msg.scrollHeight;fetch(c.apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m,chatbotId:c.id,apiKey:c.apiKey,sessionId:sid})}).then(r=>r.ok?r.json():Promise.reject()).then(d=>{ti.remove();if(d.sessionId){sid=d.sessionId;localStorage.setItem('zt_session_'+c.id,sid)}am(d.response||'Error','bot')}).catch(e=>{ti.remove();am('Error. Please try again.','bot')})}btn.onclick=sm;inp.onkeypress=function(e){if(e.key==='Enter')sm()}}();
-</script>
 </body>
 </html>
