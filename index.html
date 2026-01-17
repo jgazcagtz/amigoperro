@@ -107,10 +107,10 @@
             </div>
             <div class="nav-menu" id="nav-menu">
                 <a href="#" class="nav-link" onclick="showSection('home')">Inicio</a>
-                <a href="#" class="nav-link" onclick="showSection('services')">Servicios</a>
+                <a href="#" class="nav-link" onclick="showSection('services')">Paseos</a>
+                <a href="#" class="nav-link" onclick="showSection('pricing')">Precios</a>
                 <a href="#" class="nav-link" onclick="showSection('veterinary')">Veterinario</a>
                 <a href="#" class="nav-link" onclick="showSection('marketplace')">Accesorios</a>
-                <a href="#" class="nav-link" onclick="showSection('pricing')">Precios</a>
                 <a href="#" class="nav-link" onclick="showSection('about')">Nosotros</a>
                 <a href="#" class="nav-link" onclick="showSection('contact')">Contacto</a>
                 <button class="nav-btn" onclick="showSection('login')">Iniciar Sesión</button>
@@ -129,8 +129,8 @@
         <section id="home" class="section active">
             <div class="hero">
                 <div class="hero-content">
-                    <h1>Servicios Veterinarios y Profesionales para tu Perro en CDMX 🐾</h1>
-                    <p>Veterinario, paseos, entrenamiento y accesorios en Condesa, Roma, Del Valle, Narvarte y Juárez. Cuidado profesional para tu mejor amigo</p>
+                    <h1>Paseos Profesionales para tu Perro en CDMX 🐾</h1>
+                    <p>Servicio premium de paseos con entrenamiento en Condesa, Roma, Del Valle, Narvarte y Juárez. Paseadores certificados y expertos en adiestramiento canino</p>
                     <div class="hero-buttons">
                         <button class="btn btn-primary" onclick="showSection('register')">
                             <i class="fas fa-user-plus"></i> Registrarse
@@ -148,32 +148,32 @@
             <!-- CTA Section for Services Promotion -->
             <div class="hero-cta">
                 <div class="cta-content">
-                    <h2>🐾 Servicios Profesionales en las Mejores Colonias de CDMX</h2>
-                    <p>Atendemos Condesa, Roma, Del Valle, Narvarte y Juárez con amor y experiencia profesional</p>
+                    <h2>🐾 Paseos Premium con Entrenamiento en las Mejores Colonias de CDMX</h2>
+                    <p>Servicio principal de paseos profesionales en Condesa, Roma, Del Valle, Narvarte y Juárez</p>
                     <div class="cta-features">
                         <div class="cta-feature">
-                            <i class="fas fa-stethoscope"></i>
-                            <span>Servicio Veterinario</span>
-                        </div>
-                        <div class="cta-feature">
                             <i class="fas fa-walking"></i>
-                            <span>Paseos y Entrenamiento</span>
-                        </div>
-                        <div class="cta-feature">
-                            <i class="fas fa-shopping-bag"></i>
-                            <span>Accesorios Premium</span>
+                            <span>Paseos Profesionales</span>
                         </div>
                         <div class="cta-feature">
                             <i class="fas fa-graduation-cap"></i>
-                            <span>Cursos de Adiestramiento</span>
+                            <span>Entrenamiento Incluido</span>
+                        </div>
+                        <div class="cta-feature">
+                            <i class="fas fa-star"></i>
+                            <span>Servicio VIP</span>
+                        </div>
+                        <div class="cta-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Paseadores Certificados</span>
                         </div>
                     </div>
                     <div class="cta-buttons">
                         <button class="btn btn-primary" onclick="showSection('pricing')">
-                            <i class="fas fa-dollar-sign"></i> Ver Precios
+                            <i class="fas fa-dollar-sign"></i> Ver Planes y Precios
                         </button>
                         <button class="btn btn-accent" onclick="openWhatsApp()">
-                            <i class="fab fa-whatsapp"></i> Consultar Ahora
+                            <i class="fab fa-whatsapp"></i> Reservar Paseo Ahora
                         </button>
                     </div>
                 </div>
@@ -328,8 +328,16 @@
         <section id="services" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>🐾 Paseos y Entrenamiento Profesional</h2>
-                    <p class="section-subtitle">Servicio de paseos con entrenamiento en las mejores colonias de CDMX</p>
+                    <h2>🐾 Servicio Premium de Paseos con Entrenamiento</h2>
+                    <p class="section-subtitle">Nuestro servicio principal: Paseos profesionales con entrenamiento canino incluido</p>
+                </div>
+                
+                <div class="main-service-banner">
+                    <div class="banner-highlight">
+                        <i class="fas fa-award"></i>
+                        <h3>Servicio Principal</h3>
+                        <p>Especialistas en paseos profesionales con entrenamiento personalizado para tu perro</p>
+                    </div>
                 </div>
                 <div class="services-grid">
                     <div class="service-card">
@@ -519,12 +527,12 @@
                     <div class="pricing-category">
                         <h3><i class="fas fa-walking"></i> Paseos y Entrenamiento</h3>
                         <div class="pricing-grid">
-                            <div class="pricing-card" data-service="30min-walk" data-price="66">
+                            <div class="pricing-card" data-service="30min-walk" data-price="79">
                                 <div class="pricing-header">
                                     <h4>Paseo Básico</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">66</span>
+                                        <span class="amount">79</span>
                                         <span class="duration">/ 30 min</span>
                                     </div>
                                 </div>
@@ -535,18 +543,18 @@
                                         <li><i class="fas fa-check"></i> Ejercicio controlado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Básico - 30 min', 66)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Básico - 30 min', 79)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card featured" data-service="1hr-walk" data-price="99">
-                                <div class="pricing-badge">Más Popular</div>
+                            <div class="pricing-card featured" data-service="1hr-walk" data-price="119">
+                                <div class="pricing-badge">⭐ Más Popular</div>
                                 <div class="pricing-header">
                                     <h4>Paseo Estándar</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">99</span>
+                                        <span class="amount">119</span>
                                         <span class="duration">/ 1 hr</span>
                                     </div>
                                 </div>
@@ -558,17 +566,17 @@
                                         <li><i class="fas fa-check"></i> Reporte detallado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Estándar - 1 hr', 99)">
-                                    <i class="fab fa-whatsapp"></i> Contratar
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Estándar - 1 hr', 119)">
+                                    <i class="fab fa-whatsapp"></i> Contratar Ahora
                                 </button>
                             </div>
 
-                            <div class="pricing-card" data-service="2hr-walk" data-price="165">
+                            <div class="pricing-card" data-service="2hr-walk" data-price="199">
                                 <div class="pricing-header">
                                     <h4>Paseo Extendido</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">165</span>
+                                        <span class="amount">199</span>
                                         <span class="duration">/ 2 hrs</span>
                                     </div>
                                 </div>
@@ -580,17 +588,18 @@
                                         <li><i class="fas fa-check"></i> Reporte completo</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Extendido - 2 hrs', 165)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo Extendido - 2 hrs', 199)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card" data-service="3walks" data-price="275">
+                            <div class="pricing-card" data-service="3walks" data-price="330">
+                                <div class="pricing-badge">💰 Ahorra</div>
                                 <div class="pricing-header">
                                     <h4>Paquete 3 Paseos</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">275</span>
+                                        <span class="amount">330</span>
                                         <span class="duration">/ 3 paseos</span>
                                     </div>
                                 </div>
@@ -598,21 +607,22 @@
                                     <ul>
                                         <li><i class="fas fa-check"></i> 3 paseos de 1 hora</li>
                                         <li><i class="fas fa-check"></i> Entrenamiento progresivo</li>
-                                        <li><i class="fas fa-check"></i> Ahorro de $22</li>
+                                        <li><i class="fas fa-check"></i> Ahorra $27</li>
                                         <li><i class="fas fa-check"></i> Seguimiento continuo</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paquete 3 Paseos - 1 hr cada uno', 275)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paquete 3 Paseos - 1 hr cada uno', 330)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card" data-service="7walks" data-price="495">
+                            <div class="pricing-card" data-service="7walks" data-price="595">
+                                <div class="pricing-badge">💎 Mejor Valor</div>
                                 <div class="pricing-header">
                                     <h4>Paquete Semanal</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">495</span>
+                                        <span class="amount">595</span>
                                         <span class="duration">/ 7 paseos</span>
                                     </div>
                                 </div>
@@ -620,22 +630,22 @@
                                     <ul>
                                         <li><i class="fas fa-check"></i> 7 paseos de 1 hora</li>
                                         <li><i class="fas fa-check"></i> Entrenamiento intensivo</li>
-                                        <li><i class="fas fa-check"></i> Ahorro de $198</li>
+                                        <li><i class="fas fa-check"></i> Ahorra $238</li>
                                         <li><i class="fas fa-check"></i> Plan personalizado</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paquete Semanal - 7 paseos de 1 hr', 495)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paquete Semanal - 7 paseos de 1 hr', 595)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card vip" data-service="vip-walk" data-price="165">
-                                <div class="pricing-badge vip-badge">VIP</div>
+                            <div class="pricing-card vip" data-service="vip-walk" data-price="199">
+                                <div class="pricing-badge vip-badge">👑 VIP</div>
                                 <div class="pricing-header">
                                     <h4>Paseo VIP</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">165</span>
+                                        <span class="amount">199</span>
                                         <span class="duration">/ 1 hr</span>
                                     </div>
                                 </div>
@@ -644,10 +654,10 @@
                                         <li><i class="fas fa-check"></i> Cuidado especial individual</li>
                                         <li><i class="fas fa-check"></i> Entrenamiento personalizado</li>
                                         <li><i class="fas fa-check"></i> Atención exclusiva</li>
-                                        <li><i class="fas fa-check"></i> Reporte detallado</li>
+                                        <li><i class="fas fa-check"></i> Reporte detallado con fotos</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Paseo VIP - 1 hr', 165)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Paseo VIP - 1 hr', 199)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
@@ -657,12 +667,12 @@
                     <div class="pricing-category">
                         <h3><i class="fas fa-graduation-cap"></i> Cursos de Adiestramiento</h3>
                         <div class="pricing-grid">
-                            <div class="pricing-card" data-service="30min-course" data-price="110">
+                            <div class="pricing-card" data-service="30min-course" data-price="135">
                                 <div class="pricing-header">
                                     <h4>Curso Básico</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">110</span>
+                                        <span class="amount">135</span>
                                         <span class="duration">/ 30 min</span>
                                     </div>
                                 </div>
@@ -673,18 +683,18 @@
                                         <li><i class="fas fa-check"></i> Guía para dueños</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Curso Básico - 30 min', 110)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Curso Básico - 30 min', 135)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
 
-                            <div class="pricing-card featured" data-service="1hr-course" data-price="165">
-                                <div class="pricing-badge">Recomendado</div>
+                            <div class="pricing-card featured" data-service="1hr-course" data-price="199">
+                                <div class="pricing-badge">⭐ Recomendado</div>
                                 <div class="pricing-header">
                                     <h4>Curso Completo</h4>
                                     <div class="price">
                                         <span class="currency">$</span>
-                                        <span class="amount">165</span>
+                                        <span class="amount">199</span>
                                         <span class="duration">/ 1 hr</span>
                                     </div>
                                 </div>
@@ -696,7 +706,7 @@
                                         <li><i class="fas fa-check"></i> Seguimiento post-curso</li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-primary select-service" onclick="selectService('Curso Completo - 1 hr', 165)">
+                                <button class="btn btn-primary select-service" onclick="selectService('Curso Completo - 1 hr', 199)">
                                     <i class="fab fa-whatsapp"></i> Contratar
                                 </button>
                             </div>
@@ -1420,7 +1430,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>Amigo Perro</h4>
-                    <p>Paseos, entrenamiento y cursos profesionales para tu amigo perro</p>
+                    <p>Servicio premium de paseos profesionales con entrenamiento para tu amigo perro en CDMX</p>
                 </div>
                 <div class="footer-section">
                     <h4>Enlaces</h4>
