@@ -78,6 +78,39 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
     }
     
+    // Guarderia bookings - allow users to read and write their own bookings
+    match /guarderias/{guarderiaId} {
+      // Allow users to read their own guarderia bookings
+      allow read: if request.auth != null && 
+        resource.data.ownerId == request.auth.uid;
+      // Allow users to create guarderia bookings
+      allow create: if request.auth != null && 
+        request.resource.data.ownerId == request.auth.uid;
+      // Allow users to update their own bookings
+      allow update: if request.auth != null && 
+        resource.data.ownerId == request.auth.uid;
+      // Allow admins to read all guarderia bookings
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
+    // Play dates - allow users to read and write their own play date requests
+    match /playdates/{playdateId} {
+      // Allow authenticated users to read pending play dates (for matching)
+      allow read: if request.auth != null && 
+        (resource.data.status == 'searching' || 
+         resource.data.ownerId == request.auth.uid);
+      // Allow users to create play date requests
+      allow create: if request.auth != null && 
+        request.resource.data.ownerId == request.auth.uid;
+      // Allow users to update their own play date requests
+      allow update: if request.auth != null && 
+        resource.data.ownerId == request.auth.uid;
+      // Allow admins to read all play dates
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
     // Allow authenticated users to create new documents
     match /{document=**} {
       allow create: if request.auth != null;
