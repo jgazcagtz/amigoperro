@@ -45,37 +45,76 @@
     }
 }
 
-/* Touch optimization for mobile devices */
+/* Enhanced Touch optimization for mobile devices */
 @media (hover: none) and (pointer: coarse) {
     /* Improve touch targets for mobile */
     .btn,
     .nav-link,
     .nav-btn,
-    button {
+    button,
+    select,
+    input[type="checkbox"] + .checkmark {
         min-height: 44px;
         min-width: 44px;
         cursor: pointer;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
     }
     
+    /* Larger touch targets for checkboxes */
+    .checkbox-label {
+        padding: 0.8rem 0;
+    }
+    
+    .checkmark {
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* Better form inputs for mobile */
+    input,
+    select,
+    textarea {
+        font-size: 16px !important; /* Prevents iOS zoom on focus */
+        min-height: 48px;
+        padding: 0.9rem 1rem !important;
+    }
+    
     /* Disable hover effects on touch devices */
     .btn:hover,
     .nav-link:hover,
     .service-card:hover,
-    .pricing-card:hover {
+    .pricing-card:hover,
+    .dashboard-card:hover,
+    .walk-card:hover {
         transform: none;
     }
     
     /* Add active/press states for touch feedback */
     .btn:active,
     .nav-link:active {
-        transform: scale(0.97);
-        opacity: 0.9;
+        transform: scale(0.96);
+        opacity: 0.85;
+        transition: all 0.1s ease;
     }
     
     .service-card:active,
-    .pricing-card:active {
+    .pricing-card:active,
+    .dashboard-card:active,
+    .walk-card:active {
         transform: scale(0.98);
+        transition: all 0.1s ease;
+    }
+    
+    /* Better modal experience on mobile */
+    .modal {
+        max-height: 90vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .schedule-modal {
+        width: 95vw;
+        max-width: 95vw;
     }
 }
 
@@ -1261,31 +1300,53 @@ body {
     background: var(--gradient-primary);
 }
 
-/* Checkbox Styling */
+/* Enhanced Checkbox Styling with Better Accessibility */
 .checkbox-label {
     display: flex !important;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.8rem;
     cursor: pointer;
     font-weight: 500;
+    padding: 0.5rem 0;
+    line-height: 1.5;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.checkbox-label:hover {
+    opacity: 0.8;
 }
 
 .checkbox-label input[type="checkbox"] {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
 }
 
 .checkmark {
-    width: 20px;
-    height: 20px;
+    min-width: 24px;
+    width: 24px;
+    height: 24px;
     border: 2px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 6px;
     position: relative;
     transition: var(--transition);
+    background: var(--white);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.checkbox-label:hover .checkmark {
+    border-color: var(--primary-color);
+    transform: scale(1.05);
 }
 
 .checkbox-label input[type="checkbox"]:checked + .checkmark {
     background: var(--gradient-primary);
     border-color: var(--primary-color);
+    animation: checkboxPop 0.3s var(--animation-bounce);
 }
 
 .checkbox-label input[type="checkbox"]:checked + .checkmark::after {
@@ -1295,18 +1356,64 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--white);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.checkbox-label input[type="checkbox"]:focus + .checkmark {
+    box-shadow: 0 0 0 3px rgba(28, 125, 84, 0.2);
+}
+
+@keyframes checkboxPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
 }
 
 .terms-link {
     color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
+    border-bottom: 1px dashed var(--primary-color);
+    transition: var(--transition-fast);
 }
 
 .terms-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    border-bottom-style: solid;
+    color: var(--secondary-color);
+    border-bottom-color: var(--secondary-color);
+}
+
+/* Privacy Notice Banner */
+.privacy-notice-banner {
+    background: linear-gradient(135deg, rgba(28, 125, 84, 0.08), rgba(182, 149, 106, 0.08));
+    border-left: 4px solid var(--primary-color);
+    padding: 1.2rem;
+    border-radius: var(--border-radius);
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.privacy-notice-banner i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+.privacy-notice-banner p {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.privacy-notice-banner strong {
+    color: var(--primary-color);
+    font-weight: 700;
 }
 
 /* Enhanced Dashboard */
@@ -2130,14 +2237,56 @@ body {
     padding: 1.5rem;
 }
 
-/* Schedule Walk Modal */
+/* Schedule Walk Modal - Enhanced */
 .schedule-modal {
-    max-width: 600px;
+    max-width: 650px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.schedule-modal .modal-body {
+    padding: 2rem;
 }
 
 .schedule-modal .form-group {
     margin-bottom: 1.5rem;
+}
+
+.schedule-modal .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 1rem;
+}
+
+.schedule-modal .form-group label i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.schedule-modal input,
+.schedule-modal select,
+.schedule-modal textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--white);
+    font-family: inherit;
+}
+
+.schedule-modal input:focus,
+.schedule-modal select:focus,
+.schedule-modal textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(28, 125, 84, 0.1);
 }
 
 .schedule-modal .form-buttons {
@@ -2145,6 +2294,12 @@ body {
     gap: 1rem;
     justify-content: flex-end;
     margin-top: 2rem;
+}
+
+.schedule-modal .form-buttons .btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 /* Walk Cards */
@@ -2523,19 +2678,55 @@ body {
         justify-content: center;
     }
 
-    /* Schedule Modal Mobile */
+    /* Schedule Modal Mobile - Enhanced */
     .schedule-modal {
-        width: 95%;
-        margin: 1rem;
+        width: 95vw;
+        max-width: 95vw;
+        margin: 1rem auto;
+        max-height: 85vh;
+    }
+    
+    .schedule-modal .modal-header {
+        padding: 1.2rem 1rem;
+    }
+    
+    .schedule-modal .modal-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .schedule-modal .modal-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .schedule-modal .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+    
+    .schedule-modal .form-group {
+        margin-bottom: 1.2rem;
+    }
+    
+    .schedule-modal .form-group label {
+        font-size: 0.95rem;
     }
 
     .schedule-modal .form-buttons {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.8rem;
+        margin-top: 1.5rem;
     }
 
     .schedule-modal .form-buttons .btn {
         width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        justify-content: center;
+    }
+    
+    /* Better spacing for small text */
+    .schedule-modal small {
+        font-size: 0.85rem;
     }
 
     /* Walk Cards Mobile */

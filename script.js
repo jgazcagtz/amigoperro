@@ -254,10 +254,23 @@ window.switchTab = function(tabType) {
 window.showScheduleWalkModal = function() {
     document.getElementById('schedule-walk-modal').style.display = 'flex';
     loadDogsForSchedule();
+    
+    // Set minimum date to today
+    const dateInput = document.getElementById('walk-date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+    dateInput.value = today;
+    
+    // Set default time to 9 AM if not set
+    const timeInput = document.getElementById('walk-time');
+    if (!timeInput.value) {
+        timeInput.value = '09:00';
+    }
 };
 
 window.closeScheduleModal = function() {
     document.getElementById('schedule-walk-modal').style.display = 'none';
+    document.getElementById('schedule-walk-form').reset();
 };
 
 // Authentication Functions
@@ -282,7 +295,7 @@ async function handleOwnerRegistration(e) {
     const privacyAccepted = document.getElementById('owner-privacy').checked;
     
     if (!termsAccepted || !privacyAccepted) {
-        showNotification('Debes aceptar los términos y condiciones y la política de privacidad', 'error');
+        showNotification('Debes aceptar los términos y condiciones y el aviso de privacidad conforme a la legislación mexicana', 'error');
         return;
     }
     
@@ -295,20 +308,30 @@ async function handleOwnerRegistration(e) {
         return;
     }
     
-    const userData = {
-        name: document.getElementById('owner-name').value,
-        email: document.getElementById('owner-email').value,
-        phone: document.getElementById('owner-phone').value,
-        address: document.getElementById('owner-address').value,
-        birthdate: document.getElementById('owner-birthdate').value,
-        password: password,
-        userType: 'owner',
-        termsAccepted: true,
-        privacyAccepted: true,
-        createdAt: new Date()
-    };
+    const email = document.getElementById('owner-email').value;
     
     try {
+        // Check if user already exists with different type
+        const existingUsers = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+        if (!existingUsers.empty) {
+            showNotification('Este correo ya está registrado. Por favor inicia sesión o usa otro correo', 'error');
+            return;
+        }
+        
+        const userData = {
+            name: document.getElementById('owner-name').value,
+            email: email,
+            phone: document.getElementById('owner-phone').value,
+            address: document.getElementById('owner-address').value,
+            birthdate: document.getElementById('owner-birthdate').value,
+            password: password,
+            userType: 'owner',
+            termsAccepted: true,
+            privacyAccepted: true,
+            privacyAcceptedDate: new Date().toISOString(),
+            createdAt: new Date()
+        };
+        
         // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
         
@@ -340,7 +363,7 @@ async function handleWalkerRegistration(e) {
     const insuranceConfirmed = document.getElementById('walker-insurance').checked;
     
     if (!termsAccepted || !privacyAccepted) {
-        showNotification('Debes aceptar los términos y condiciones y la política de privacidad', 'error');
+        showNotification('Debes aceptar los términos y condiciones y el aviso de privacidad conforme a la legislación mexicana', 'error');
         return;
     }
     
@@ -358,24 +381,34 @@ async function handleWalkerRegistration(e) {
         return;
     }
     
-    const userData = {
-        name: document.getElementById('walker-name').value,
-        email: document.getElementById('walker-email').value,
-        phone: document.getElementById('walker-phone').value,
-        birthdate: document.getElementById('walker-birthdate').value,
-        experience: document.getElementById('walker-experience').value,
-        zones: document.getElementById('walker-zones').value,
-        description: document.getElementById('walker-description').value,
-        password: password,
-        userType: 'walker',
-        isVerified: false,
-        termsAccepted: true,
-        privacyAccepted: true,
-        insuranceConfirmed: true,
-        createdAt: new Date()
-    };
+    const email = document.getElementById('walker-email').value;
     
     try {
+        // Check if user already exists with different type
+        const existingUsers = await getDocs(query(collection(db, 'users'), where('email', '==', email)));
+        if (!existingUsers.empty) {
+            showNotification('Este correo ya está registrado. Por favor inicia sesión o usa otro correo', 'error');
+            return;
+        }
+        
+        const userData = {
+            name: document.getElementById('walker-name').value,
+            email: email,
+            phone: document.getElementById('walker-phone').value,
+            birthdate: document.getElementById('walker-birthdate').value,
+            experience: document.getElementById('walker-experience').value,
+            zones: document.getElementById('walker-zones').value,
+            description: document.getElementById('walker-description').value,
+            password: password,
+            userType: 'walker',
+            isVerified: false,
+            termsAccepted: true,
+            privacyAccepted: true,
+            privacyAcceptedDate: new Date().toISOString(),
+            insuranceConfirmed: true,
+            createdAt: new Date()
+        };
+        
         // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
         
@@ -406,7 +439,7 @@ async function handleLogin(e) {
     const loginType = document.getElementById('login-type').value;
     
     if (!email || !password || !loginType) {
-        showNotification('Por favor completa todos los campos', 'error');
+        showNotification('Por favor completa todos los campos incluyendo el tipo de usuario', 'error');
         return;
     }
     
@@ -417,16 +450,23 @@ async function handleLogin(e) {
         if (userDoc.exists()) {
             const userData = userDoc.data();
             
-            if (userData.userType === loginType) {
-                userType = userData.userType;
-                currentUser = userCredential.user;
-                showSection('dashboard');
-                showNotification(`Bienvenido ${userData.name}`, 'success');
-                loadUserData();
-            } else {
+            // Enforce user type matching
+            if (userData.userType !== loginType) {
                 await signOut(auth);
-                showNotification('Tipo de usuario incorrecto', 'error');
+                const correctType = userData.userType === 'owner' ? 'Dueño de Perro' : 'Paseador';
+                showNotification(`Este correo está registrado como ${correctType}. Por favor selecciona el tipo correcto.`, 'error');
+                return;
             }
+            
+            // Successful login
+            userType = userData.userType;
+            currentUser = userCredential.user;
+            showNotification(`¡Bienvenido de vuelta, ${userData.name}! 🐾`, 'success');
+            showSection('dashboard');
+            loadUserData();
+        } else {
+            await signOut(auth);
+            showNotification('Usuario no encontrado. Por favor regístrate primero.', 'error');
         }
         
     } catch (error) {
@@ -792,34 +832,67 @@ async function handleAddDog(e) {
     }
 }
 
-// Schedule Walk Function
+// Schedule Walk Function with Enhanced Validation
 async function handleScheduleWalk(e) {
     e.preventDefault();
     
+    const dogId = document.getElementById('walk-dog').value;
+    const date = document.getElementById('walk-date').value;
+    const time = document.getElementById('walk-time').value;
+    const duration = parseInt(document.getElementById('walk-duration').value);
+    const zone = document.getElementById('walk-zone').value;
+    
+    // Validate dog selection
+    if (!dogId) {
+        showNotification('Por favor selecciona un perro para el paseo', 'error');
+        return;
+    }
+    
+    // Validate date is not in the past
+    const selectedDate = new Date(date + 'T' + time);
+    const now = new Date();
+    if (selectedDate < now) {
+        showNotification('No puedes programar un paseo en el pasado. Por favor selecciona una fecha y hora futuras.', 'error');
+        return;
+    }
+    
+    // Validate time is within business hours (8 AM to 8 PM)
+    const hour = parseInt(time.split(':')[0]);
+    if (hour < 8 || hour >= 20) {
+        showNotification('Los paseos solo están disponibles entre 8:00 AM y 8:00 PM', 'error');
+        return;
+    }
+    
+    // Get user data for owner info
+    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+    const userData = userDoc.data();
+    
     const walkData = {
-        dogId: document.getElementById('walk-dog').value,
+        dogId: dogId,
         dogName: document.getElementById('walk-dog').options[document.getElementById('walk-dog').selectedIndex].text,
-        date: document.getElementById('walk-date').value,
-        time: document.getElementById('walk-time').value,
-        duration: parseInt(document.getElementById('walk-duration').value),
-        zone: document.getElementById('walk-zone').value,
-        notes: document.getElementById('walk-notes').value,
+        date: date,
+        time: time,
+        duration: duration,
+        zone: zone,
+        notes: document.getElementById('walk-notes').value || '',
         budget: document.getElementById('walk-budget').value || null,
         ownerId: currentUser.uid,
-        ownerName: currentUser.displayName || 'Dueño',
+        ownerName: userData.name || 'Dueño',
+        ownerPhone: userData.phone || '',
         status: 'pending',
-        createdAt: new Date()
+        createdAt: new Date(),
+        canRate: false
     };
     
     try {
         await addDoc(collection(db, 'walks'), walkData);
-        showNotification('Paseo programado exitosamente', 'success');
+        showNotification('✅ Paseo solicitado exitosamente! Los paseadores verán tu solicitud pronto.', 'success');
         closeScheduleModal();
         loadScheduledWalks();
-        document.getElementById('schedule-walk-form').reset();
+        updateOwnerStatistics();
     } catch (error) {
         console.error('Error scheduling walk:', error);
-        showNotification('Error al programar paseo', 'error');
+        showNotification('Error al programar paseo. Por favor intenta de nuevo.', 'error');
     }
 }
 
