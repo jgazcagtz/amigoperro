@@ -4273,3 +4273,95 @@ img[loading="lazy"].loaded {
         font-size: 16px;
     }
 }
+
+/* Guarderia and Play Date Modals */
+#guarderia-modal .modal,
+#playdate-modal .modal {
+    max-width: 650px;
+    width: 90%;
+}
+
+#guarderia-modal .modal-body,
+#playdate-modal .modal-body {
+    padding: 2rem;
+}
+
+#guarderia-modal .form-group,
+#playdate-modal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#guarderia-modal input,
+#guarderia-modal select,
+#guarderia-modal textarea,
+#playdate-modal input,
+#playdate-modal select,
+#playdate-modal textarea {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--white);
+    font-family: inherit;
+}
+
+#guarderia-modal input:focus,
+#guarderia-modal select:focus,
+#guarderia-modal textarea:focus,
+#playdate-modal input:focus,
+#playdate-modal select:focus,
+#playdate-modal textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(28, 125, 84, 0.1);
+}
+
+/* Enhanced action cards for dashboard */
+.action-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .action-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    #guarderia-modal .modal,
+    #playdate-modal .modal {
+        width: 95vw;
+        max-width: 95vw;
+    }
+    
+    #guarderia-modal .modal-body,
+    #playdate-modal .modal-body {
+        padding: 1.5rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .action-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Professional expertise badges */
+.expertise-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, rgba(28, 125, 84, 0.1), rgba(182, 149, 106, 0.1));
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0.25rem;
+}
+
+.expertise-badge i {
+    color: var(--secondary-color);
+}

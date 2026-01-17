@@ -2331,4 +2331,188 @@ Espero su respuesta. ¡Gracias! 🐾`;
             contactForm.reset();
         });
     }
+    
+    // Guarderia form
+    const guarderiaForm = document.getElementById('guarderia-form');
+    if (guarderiaForm) {
+        guarderiaForm.addEventListener('submit', handleGuarderiaBooking);
+    }
+    
+    // Play Date form
+    const playdateForm = document.getElementById('playdate-form');
+    if (playdateForm) {
+        playdateForm.addEventListener('submit', handlePlayDateRequest);
+    }
 });
+
+// Guarderia Modal Functions
+window.showGuarderiaModal = function() {
+    document.getElementById('guarderia-modal').style.display = 'flex';
+    loadDogsForGuarderia();
+    
+    // Set minimum date to today
+    const dateInput = document.getElementById('guarderia-date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+    dateInput.value = today;
+};
+
+window.closeGuarderiaModal = function() {
+    document.getElementById('guarderia-modal').style.display = 'none';
+    document.getElementById('guarderia-form').reset();
+};
+
+async function loadDogsForGuarderia() {
+    const dogSelect = document.getElementById('guarderia-dog');
+    try {
+        const dogsQuery = query(collection(db, 'dogs'), where('ownerId', '==', currentUser.uid));
+        const dogsSnapshot = await getDocs(dogsQuery);
+        
+        let optionsHTML = '<option value="">Selecciona tu amigo</option>';
+        dogsSnapshot.forEach(doc => {
+            const dog = doc.data();
+            optionsHTML += `<option value="${doc.id}">${dog.name} (${dog.breed})</option>`;
+        });
+        
+        dogSelect.innerHTML = optionsHTML;
+    } catch (error) {
+        console.error('Error loading dogs for guarderia:', error);
+    }
+}
+
+async function handleGuarderiaBooking(e) {
+    e.preventDefault();
+    
+    const dogId = document.getElementById('guarderia-dog').value;
+    const date = document.getElementById('guarderia-date').value;
+    const time = document.getElementById('guarderia-time').value;
+    const zone = document.getElementById('guarderia-zone').value;
+    const notes = document.getElementById('guarderia-notes').value;
+    
+    if (!dogId) {
+        showNotification('Por favor selecciona un perro', 'error');
+        return;
+    }
+    
+    // Get user data for owner info
+    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+    const userData = userDoc.data();
+    
+    const guarderiaData = {
+        dogId: dogId,
+        dogName: document.getElementById('guarderia-dog').options[document.getElementById('guarderia-dog').selectedIndex].text,
+        date: date,
+        timeSlot: time,
+        zone: zone,
+        notes: notes || '',
+        ownerId: currentUser.uid,
+        ownerName: userData.name || 'Dueño',
+        ownerPhone: userData.phone || '',
+        status: 'pending',
+        type: 'guarderia',
+        createdAt: new Date()
+    };
+    
+    try {
+        await addDoc(collection(db, 'guarderias'), guarderiaData);
+        showNotification('✅ Solicitud de guardería enviada! Te contactaremos pronto para confirmar.', 'success');
+        closeGuarderiaModal();
+    } catch (error) {
+        console.error('Error booking guarderia:', error);
+        showNotification('Error al solicitar guardería. Por favor intenta de nuevo.', 'error');
+    }
+}
+
+// Play Date Modal Functions
+window.showPlayDateModal = function() {
+    document.getElementById('playdate-modal').style.display = 'flex';
+    loadDogsForPlayDate();
+    
+    // Set minimum date to today
+    const dateInput = document.getElementById('playdate-date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+    dateInput.value = today;
+    
+    // Set default time
+    const timeInput = document.getElementById('playdate-time');
+    if (!timeInput.value) {
+        timeInput.value = '10:00';
+    }
+};
+
+window.closePlayDateModal = function() {
+    document.getElementById('playdate-modal').style.display = 'none';
+    document.getElementById('playdate-form').reset();
+};
+
+async function loadDogsForPlayDate() {
+    const dogSelect = document.getElementById('playdate-dog');
+    try {
+        const dogsQuery = query(collection(db, 'dogs'), where('ownerId', '==', currentUser.uid));
+        const dogsSnapshot = await getDocs(dogsQuery);
+        
+        let optionsHTML = '<option value="">Selecciona tu amigo</option>';
+        dogsSnapshot.forEach(doc => {
+            const dog = doc.data();
+            optionsHTML += `<option value="${doc.id}">${dog.name} (${dog.breed})</option>`;
+        });
+        
+        dogSelect.innerHTML = optionsHTML;
+    } catch (error) {
+        console.error('Error loading dogs for play date:', error);
+    }
+}
+
+async function handlePlayDateRequest(e) {
+    e.preventDefault();
+    
+    const dogId = document.getElementById('playdate-dog').value;
+    const preferredSize = document.getElementById('playdate-size').value;
+    const energyLevel = document.getElementById('playdate-energy').value;
+    const date = document.getElementById('playdate-date').value;
+    const time = document.getElementById('playdate-time').value;
+    const zone = document.getElementById('playdate-zone').value;
+    const description = document.getElementById('playdate-description').value;
+    
+    if (!dogId) {
+        showNotification('Por favor selecciona un perro', 'error');
+        return;
+    }
+    
+    // Get user data for owner info
+    const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+    const userData = userDoc.data();
+    
+    // Get dog data
+    const dogDoc = await getDoc(doc(db, 'dogs', dogId));
+    const dogData = dogDoc.data();
+    
+    const playDateData = {
+        dogId: dogId,
+        dogName: dogData.name,
+        dogBreed: dogData.breed,
+        dogAge: dogData.age,
+        preferredSize: preferredSize,
+        energyLevel: energyLevel,
+        date: date,
+        time: time,
+        zone: zone,
+        description: description || '',
+        ownerId: currentUser.uid,
+        ownerName: userData.name || 'Dueño',
+        ownerPhone: userData.phone || '',
+        status: 'searching',
+        type: 'playdate',
+        createdAt: new Date()
+    };
+    
+    try {
+        await addDoc(collection(db, 'playdates'), playDateData);
+        showNotification('✅ Búsqueda de play date iniciada! Nuestro experto en etología te contactará con matches compatibles.', 'success');
+        closePlayDateModal();
+    } catch (error) {
+        console.error('Error requesting play date:', error);
+        showNotification('Error al solicitar play date. Por favor intenta de nuevo.', 'error');
+    }
+}
